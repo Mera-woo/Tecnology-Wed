@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>PNotas - Herramienta para estudiantes</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="estilo.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="script.js" defer></script>
+    <script src="motor.js" defer></script>
 </head>
 <body>
 
@@ -41,17 +41,14 @@
     <!-- ============================================================= -->
     <section id="vistaPanel" class="panel oculto">
 
-        <!-- Encabezado del panel: titulo + buscador + boton nueva nota -->
+        <!-- Encabezado del panel: titulo + boton nueva nota -->
         <header class="panelHeader">
             <h1 class="titulo panelTitulo">Mis Notas</h1>
-            <div class="panelHeaderAcciones">
-                <input type="search" id="inputBuscar" class="buscador" placeholder="Buscar nota...">
-                <button id="btnNuevaNota" class="btnAccion">+ Nueva nota</button>
-            </div>
+            <button id="btnNuevaNota" class="btnAccion">+ Nueva nota</button>
         </header>
 
         <!-- Mensaje cuando no hay ninguna nota todavia -->
-        <p id="mensajeVacio" class="mensajeVacio">Todavia no tienes notas. Crea tu primera nota con el boton "+ Nueva nota".</p>
+        <p id="mensajeVacio" class="mensajeVacio">Todavia no tienes notas. Crea tu primera nota con el boton "Nueva nota".</p>
 
         <!-- Contenedor donde se pintan las tarjetas de notas -->
         <div id="listaNotas" class="listaNotas"></div>
