@@ -2,18 +2,25 @@
 /*  VARIABLES DE COLOR - MODO CLARO                                  */
 /* ================================================================= */
 :root {
-    --base-color1: rgba(255, 255, 255, 1);
-    --base-color2: #E0E0E0;
-    --base-color3: rgba(194, 194, 194, 1);
+    --base-color1: #f7f8fb;
+    --base-color2: #e6e8ee;
+    --base-color3: #c8ccd6;
     --base-variant: #e8e9ed;
     --text-color: #2e3557;
     --secondary-color: #232738;
     --primary-color: #3a435d;
-    --primary-color-glass: #c7cfe425;
+    --primary-color-glass: rgba(255, 255, 255, 0.42);
     --primary-color-shadow: #5e5e5e;
+    --glass-edge-light: rgba(255, 255, 255, 0.95);
+    --glass-edge-dim: rgba(58, 67, 93, 0.2);
+    --glass-shadow: 12px 14px 28px rgba(120, 128, 145, 0.38), -10px -10px 22px rgba(255, 255, 255, 0.92), inset 1px 1px 0 rgba(255, 255, 255, 0.9);
+    --glass-shadow-hover: 16px 20px 36px rgba(90, 98, 120, 0.34), -8px -8px 20px rgba(255, 255, 255, 0.95);
+    --neo-shadow: 5px 5px 12px rgba(46, 53, 87, 0.32), -4px -4px 10px rgba(255, 255, 255, 0.75);
     --accent-color: #0071ff;
     --text-color2: white;
     --transparencia: rgba(255, 255, 255, 0);
+    --orb-a: rgba(0, 113, 255, 0.4);
+    --orb-b: rgba(124, 92, 255, 0.3);
 }
 
 /* ================================================================= */
@@ -27,14 +34,537 @@
     --text-color: #ffffff;
     --secondary-color: #a4a5b8;
     --primary-color: #3a435d;
-    --primary-color-glass: #ffffff17;
+    --primary-color-glass: rgba(255, 255, 255, 0.09);
     --primary-color-shadow: #3a3a3a;
+    --glass-edge-light: rgba(255, 255, 255, 0.42);
+    --glass-edge-dim: rgba(255, 255, 255, 0.1);
+    --glass-shadow: 10px 12px 28px rgba(0, 0, 0, 0.45), -6px -6px 16px rgba(255, 255, 255, 0.05), inset 1px 1px 0 rgba(255, 255, 255, 0.18);
+    --glass-shadow-hover: 14px 18px 32px rgba(0, 0, 0, 0.55), -4px -4px 12px rgba(255, 255, 255, 0.06);
+    --neo-shadow: 5px 5px 12px rgba(0, 0, 0, 0.5), -3px -3px 8px rgba(255, 255, 255, 0.08);
     --accent-color: #0071ff;
+    --orb-a: rgba(0, 113, 255, 0.34);
+    --orb-b: rgba(130, 90, 230, 0.26);
     --text-color2: white;
     --transparencia: rgba(255, 255, 255, 0);
 }
 
 /* ================================================================= */
+/*  BASE / RESET                                                     */
+/* ================================================================= */
+* {
+    padding: 0px;
+    margin: 0px;
+    font-family: Arial;
+    box-sizing: border-box;
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    min-height: 100%;
+    isolation: isolate;
+    background: #5e5e5e;
+    background: linear-gradient(90deg, var(--base-color1) 0%, var(--base-color2) 50%, var(--base-color3) 100%);
+    background-attachment: fixed;
+}
+
+/* El blur del vidrio solo se ve si hay color detras. Estas manchas no cambian el HTML. */
+body::before,
+body::after {
+    content: "";
+    position: fixed;
+    z-index: -1;
+    pointer-events: none;
+    border-radius: 50%;
+    filter: blur(52px);
+}
+
+body::before {
+    width: 380px;
+    height: 380px;
+    top: 14%;
+    left: 22%;
+    background: var(--orb-a);
+}
+
+body::after {
+    width: 300px;
+    height: 300px;
+    right: 18%;
+    bottom: 8%;
+    background: var(--orb-b);
+}
+
+/* Utilidad para ocultar vistas sin borrarlas del DOM */
+.oculto {
+    display: none !important;
+}
+
+/* ================================================================= */
+/*  BARRA DE NAVEGACION                                              */
+/* ================================================================= */
+.navbar {
+    list-style-type: none;
+    margin: 1px;
+    padding: 1px;
+}
+
+.navbar ul {
+    list-style-type: none;
+}
+
+.navbar li:first-child {
+    float: left;
+}
+
+.navbar li {
+    float: right;
+}
+
+.logoImg {
+    height: 56px;
+    width: 56px;
+    margin: 5px;
+    border-radius: 16px;
+    object-fit: cover;
+    display: block;
+}
+
+/* ================================================================= */
+/*  BOTON CAMBIAR MODO CLARO / OSCURO                                */
+/* ================================================================= */
+#cambiarModo {
+    height: 70px;
+    width: 70px;
+    background-color: var(--transparencia);
+    border-color: var(--transparencia);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+#cambiarModo svg {
+    fill: var(--text-color);
+}
+
+#cambiarModo svg:first-child {
+    display: none;
+}
+
+#cambiarModo svg:last-child {
+    display: block;
+}
+
+.darkMode #cambiarModo svg:first-child {
+    display: block;
+}
+
+.darkMode #cambiarModo svg:last-child {
+    display: none;
+}
+
+/* ================================================================= */
+/*  CONTENEDOR GLASS (efecto vidrio reutilizable)                    */
+/* ================================================================= */
+.glassContainer {
+    background-color: var(--primary-color-glass);
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    border-radius: 50px;
+    border: 1px solid var(--glass-edge-dim);
+    border-top-color: var(--glass-edge-light);
+    border-left-color: var(--glass-edge-light);
+    box-shadow: var(--glass-shadow);
+}
+
+/* ================================================================= */
+/*  VISTA 1: INICIAR SESION                                          */
+/* ================================================================= */
+.inFlex {
+    height: calc(100vh - 82px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.inFlex .glassContainer {
+    height: 450px;
+    width: 400px;
+    max-width: 90vw;
+    padding: 50px 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.titulo {
+    margin: 30px;
+    color: var(--text-color);
+
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+/* Campos e input de la vista de login (se reutilizan en el modal) */
+.email,
+.psw {
+    border-color: rgba(255, 255, 255, 0);
+    box-shadow: var(--neo-shadow);
+    background-color: var(--primary-color);
+    color: var(--text-color2);
+    font-family: 'Segoe UI';
+    border-radius: 50px;
+    width: 300px;
+    max-width: 100%;
+    height: 27px;
+    margin: 20px;
+    padding: 0 16px;
+}
+
+.email::placeholder,
+.psw::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.btnIniciarSesion {
+    border-color: rgba(255, 255, 255, 0);
+    box-shadow: var(--neo-shadow);
+    background-color: var(--primary-color);
+    color: var(--text-color2);
+    font-family: 'Segoe UI';
+    border-radius: 50px;
+    width: 175px;
+    height: 27px;
+    margin-top: 120px;
+    cursor: pointer;
+    transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+.btnIniciarSesion:hover {
+    background-color: var(--accent-color);
+    transform: translateY(-2px);
+}
+
+.btnIniciarSesion:active,
+.btnAccion:active,
+.btnSecundario:active,
+.notaBtnIcono:active {
+    box-shadow: inset 3px 3px 7px rgba(0, 0, 0, 0.35), inset -2px -2px 5px rgba(255, 255, 255, 0.12);
+    transform: translateY(1px);
+}
+
+/* ================================================================= */
+/*  VISTA 2: PANEL PRINCIPAL DE NOTAS                                */
+/* ================================================================= */
+.panel {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px 30px 60px;
+}
+
+/* --- Encabezado del panel: titulo + buscador + boton --- */
+.panelHeader {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.panelTitulo {
+    margin: 10px 0;
+}
+
+.panelHeaderAcciones {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+}
+
+.buscador {
+    border: none;
+    box-shadow: var(--neo-shadow);
+    background-color: var(--primary-color);
+    color: var(--text-color2);
+    font-family: 'Segoe UI';
+    border-radius: 50px;
+    height: 40px;
+    width: 240px;
+    max-width: 60vw;
+    padding: 0 18px;
+}
+
+.buscador::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* --- Boton de accion principal (+ Nueva nota / Guardar) --- */
+.btnAccion {
+    border: none;
+    box-shadow: var(--neo-shadow);
+    background-color: var(--accent-color);
+    color: var(--text-color2);
+    font-family: 'Segoe UI';
+    font-weight: bold;
+    border-radius: 50px;
+    height: 40px;
+    padding: 0 22px;
+    cursor: pointer;
+    transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.btnAccion:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+}
+
+/* --- Boton secundario (Cancelar) --- */
+.btnSecundario {
+    border: none;
+    box-shadow: var(--neo-shadow);
+    background-color: var(--primary-color);
+    color: var(--text-color2);
+    font-family: 'Segoe UI';
+    border-radius: 50px;
+    height: 40px;
+    padding: 0 22px;
+    cursor: pointer;
+    transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.btnSecundario:hover {
+    filter: brightness(1.15);
+    transform: translateY(-2px);
+}
+
+/* --- Mensaje cuando no hay notas --- */
+.mensajeVacio {
+    color: var(--text-color);
+    font-family: 'Segoe UI';
+    text-align: center;
+    margin: 60px auto;
+    max-width: 420px;
+    opacity: 0.8;
+}
+
+/* ================================================================= */
+/*  LISTA DE NOTAS (rejilla de tarjetas)                             */
+/* ================================================================= */
+.listaNotas {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+}
+
+/* --- Tarjeta individual de nota --- */
+.notaCard {
+    background-color: var(--primary-color-glass);
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    border-radius: 26px;
+    border: 1px solid var(--glass-edge-dim);
+    border-top-color: var(--glass-edge-light);
+    border-left-color: var(--glass-edge-light);
+    box-shadow: var(--glass-shadow);
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-height: 180px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.notaCard:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--glass-shadow-hover);
+}
+
+.notaCardTitulo {
+    color: var(--text-color);
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    font-weight: bold;
+    font-size: 1.15rem;
+    word-break: break-word;
+}
+
+.notaCardContenido {
+    color: var(--text-color);
+    font-family: 'Segoe UI';
+    font-size: 0.95rem;
+    line-height: 1.4;
+    white-space: pre-wrap;
+    word-break: break-word;
+    flex: 1;
+    opacity: 0.9;
+}
+
+.notaCardFecha {
+    color: var(--secondary-color);
+    font-family: 'Segoe UI';
+    font-size: 0.75rem;
+}
+
+/* --- Botones de cada tarjeta (editar / eliminar) --- */
+.notaCardBotones {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.notaBtnIcono {
+    border: none;
+    background-color: var(--primary-color);
+    color: var(--text-color2);
+    font-family: 'Segoe UI';
+    border-radius: 50px;
+    height: 34px;
+    padding: 0 16px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    box-shadow: var(--neo-shadow);
+    transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.notaBtnIcono:hover {
+    filter: brightness(1.15);
+    transform: translateY(-2px);
+}
+
+.notaBtnEliminar:hover {
+    background-color: #c0392b;
+    filter: none;
+}
+
+/* ================================================================= */
+/*  MODAL: CREAR / EDITAR NOTA                                       */
+/* ================================================================= */
+.modalFondo {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.45);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    z-index: 100;
+}
+
+.modalCaja {
+    width: 460px;
+    max-width: 100%;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+}
+
+.modalTitulo {
+    margin: 10px;
+}
+
+.inputModal {
+    margin: 0;
+    height: 40px;
+    width: 100%;
+}
+
+.areaModal {
+    border: none;
+    box-shadow: var(--neo-shadow);
+    background-color: var(--primary-color);
+    color: var(--text-color2);
+    font-family: 'Segoe UI';
+    border-radius: 26px;
+    width: 100%;
+    min-height: 140px;
+    padding: 16px;
+    resize: vertical;
+}
+
+.areaModal::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.modalBotones {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    width: 100%;
+    margin-top: 6px;
+}
+
+/* ================================================================= */
+/*  RESPONSIVE - TELEFONO Y TABLET                                   */
+/* ================================================================= */
+@media (max-width: 600px) {
+    body::before,
+    body::after {
+        width: 220px;
+        height: 220px;
+    }
+
+    body::before {
+        top: 8%;
+        left: -40px;
+    }
+
+    body::after {
+        right: -30px;
+        bottom: 6%;
+    }
+
+    .inFlex .glassContainer {
+        height: auto;
+        padding: 40px 20px;
+    }
+
+    .btnIniciarSesion {
+        margin-top: 60px;
+    }
+
+    .panel {
+        padding: 16px 16px 40px;
+    }
+
+    .panelHeader {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .panelHeaderAcciones {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .buscador {
+        width: 100%;
+        max-width: none;
+    }
+
+    .btnAccion {
+        width: 100%;
+    }
+
+    .listaNotas {
+        grid-template-columns: 1fr;
+    }
+
+    .titulo {
+        margin: 16px;
+        font-size: 1.6rem;
+    }
+}/* ================================================================= */
 /*  BASE / RESET                                                     */
 /* ================================================================= */
 * {
