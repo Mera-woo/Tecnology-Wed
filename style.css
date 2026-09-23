@@ -335,7 +335,7 @@ body {
 
 .notaCardTitulo {
     color: var(--text-color);
-    font-family: 'Segoe UI';
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
     font-weight: bold;
     font-size: 1.15rem;
     word-break: break-word;
