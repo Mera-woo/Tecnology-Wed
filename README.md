@@ -3,6 +3,21 @@
 Es un proyecto escolar, en el cual nos estamos basando en un herramienta wed de toma de notas de clases. en la cual sera
 una manera de almacenar toda la informacion para el estudiante.
 
+/* =================================================================
+
+   PNotas - Estructura Base de la Aplicacion
+   
+   -----------------------------------------------------------------
+
+    1)<!--  BARRA DE NAVEGACION (logo + boton de modo claro/oscuro) -->
+
+    2)<!--  VISTA 1: INICIAR SESION -->
+
+    3)<!--  VISTA 2: PANEL PRINCIPAL DE NOTAS -->
+
+    4)<!--  FUNCIONALIDAD: CREAR / EDITAR NOTA -->
+
+
 
 /* =================================================================
 
