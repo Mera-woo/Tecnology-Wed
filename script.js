@@ -230,3 +230,4 @@ const eliminarNota = (id) => {
    7) BUSCADOR DE NOTAS
    ----------------------------------------------------------------- */
 inputBuscar.addEventListener('input', renderizarNotas);
+
