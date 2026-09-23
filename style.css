@@ -1,6 +1,6 @@
-/* ================================================================= */
-/*  VARIABLES DE COLOR - MODO CLARO                                  */
-/* ================================================================= */
+
+/*  VARIABLES DE COLOR - MODO CLARO */
+
 :root {
     --base-color1: #f7f8fb;
     --base-color2: #e6e8ee;
@@ -23,9 +23,9 @@
     --orb-b: rgba(124, 92, 255, 0.3);
 }
 
-/* ================================================================= */
-/*  VARIABLES DE COLOR - MODO OSCURO                                 */
-/* ================================================================= */
+
+/*  VARIABLES DE COLOR - MODO OSCURO */
+
 .darkMode {
     --base-color1: rgba(94, 94, 94, 1);
     --base-color2: rgba(69, 68, 68, 1);
@@ -48,9 +48,9 @@
     --transparencia: rgba(255, 255, 255, 0);
 }
 
-/* ================================================================= */
-/*  BASE / RESET                                                     */
-/* ================================================================= */
+
+/*  BASE / RESET */
+
 * {
     padding: 0px;
     margin: 0px;
@@ -102,9 +102,9 @@ body::after {
     display: none !important;
 }
 
-/* ================================================================= */
-/*  BARRA DE NAVEGACION                                              */
-/* ================================================================= */
+
+/*  BARRA DE NAVEGACION */
+
 .navbar {
     list-style-type: none;
     margin: 1px;
@@ -132,9 +132,9 @@ body::after {
     display: block;
 }
 
-/* ================================================================= */
-/*  BOTON CAMBIAR MODO CLARO / OSCURO                                */
-/* ================================================================= */
+
+/*  BOTON CAMBIAR MODO CLARO / OSCURO */
+
 #cambiarModo {
     height: 70px;
     width: 70px;
@@ -168,9 +168,9 @@ body::after {
     display: none;
 }
 
-/* ================================================================= */
-/*  CONTENEDOR GLASS (efecto vidrio reutilizable)                    */
-/* ================================================================= */
+
+/*  CONTENEDOR GLASS (efecto vidrio reutilizable) */
+
 .glassContainer {
     background-color: var(--primary-color-glass);
     backdrop-filter: blur(18px) saturate(160%);
