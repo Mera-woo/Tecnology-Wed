@@ -1,0 +1,169 @@
+:root {
+    --base-color1: rgba(255, 255, 255, 1);
+    --base-color2: #E0E0E0;
+    --base-color3: rgba(194, 194, 194, 1);
+    --base-variant: #e8e9ed;
+    --text-color: #2e3557;
+    --secondary-color: #232738;
+    --primary-color: #3a435d;
+    --primary-color-glass: #c7cfe425;
+    --primary-color-shadow: #5e5e5e;
+    --accent-color: #0071ff;
+    --text-color2: white;
+    --transparencia: rgba(255, 255, 255, 0);
+}
+
+.darkMode {
+    --base-color1: rgba(94, 94, 94, 1);
+    --base-color2: rgba(69, 68, 68, 1);
+    --base-color3: rgba(0, 0, 0, 1);
+    --base-variant: #101425;
+    --text-color: #ffffff;
+    --secondary-color: #a4a5b8;
+    --primary-color: #3a435d;
+    --primary-color-glass: #ffffff17;
+    --primary-color-shadow: #3a3a3a;
+    --accent-color: #0071ff;
+    --text-color2: white;
+    --transparencia: rgba(255, 255, 255, 0);
+}
+
+* {
+    padding: 0px;
+    margin: 0px;
+    font-family: Arial;
+}
+
+html {
+    height: 100%;
+}
+
+.navbar {
+    list-style-type: none;
+
+    margin: 1px;
+    padding: 1px;
+}
+
+.navbar ul{
+    list-style-type: none;
+}
+
+.navbar li:first-child{
+    float: left;
+}
+
+.navbar li  {
+    float: right;
+}
+
+body {
+    height: 100%;
+
+    background: #5e5e5e;
+    background: linear-gradient(90deg, var(--base-color1) 0%, var(--base-color2) 50%, var(--base-color3) 100%);
+}
+
+.logoImg {
+    height: 70px;
+    width: 70px;
+    margin: 5px;
+}
+
+.inFlex {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.glassContainer{
+    height: 450px;
+    width: 400px;
+    padding: 50px, 30px;
+    background-color: var(--primary-color-glass);
+    backdrop-filter: blur(10px);
+    border-radius: 50px;
+    border-top: rgb(255, 255, 255, 0.40);
+    border-right: rgb(255, 255, 255, 0.30);
+    box-shadow: 2px 2px 2px var(--primary-color-shadow);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.titulo {
+    margin: 30px;
+    color: var(--text-color);
+    font-family: Impact;
+}
+
+.email {
+    border-color: rgba(255, 255, 255, 0);
+    box-shadow: 1px 1px 1px var(--primary-color-shadow);
+    background-color: var(--primary-color);
+    color: var(--text-color2);
+    font-family: 'Segoe UI';
+    border-radius: 50px;
+    width: 300px;
+    height: 27px;
+    margin: 20px;
+}
+
+.psw {
+    border-color: rgba(255, 255, 255, 0);
+    box-shadow: 1px 1px 1px var(--primary-color-shadow);
+    background-color: var(--primary-color);
+    color: var(--text-color2);
+    font-family: 'Segoe UI';
+    border-radius: 50px;
+    width: 300px;
+    height: 27px;
+    margin: 20px;
+}
+
+.btnIniciarSesion {
+    border-color: rgba(255, 255, 255, 0);
+    box-shadow: 1px 1px 1px var(--primary-color-shadow);
+    background-color: var(--primary-color);
+    color: var(--text-color2);
+    font-family: 'Segoe UI';
+    border-radius: 50px;
+    width: 175px;
+    height: 27px;
+    margin-top: 120px;
+}
+
+#cambiarModo {
+    height: 70px;
+    width: 70px;
+    background-color: var(--transparencia);
+    border-color: var(--transparencia);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+    margin: 5px;
+}
+
+#cambiarModo svg {
+    fill: var(--text-color);
+}
+
+#cambiarModo svg:first-child {
+    display: none;
+}
+
+#cambiarModo svg:last-child {
+    display: block;
+}
+
+.darkMode #cambiarModo svg:first-child {
+    display: block;
+}
+
+.darkMode #cambiarModo svg:last-child {
+    display: none;
+}
