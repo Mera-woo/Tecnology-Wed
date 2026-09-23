@@ -10,9 +10,13 @@ una manera de almacenar toda la informacion para el estudiante.
    El codigo esta separado por bloques, cada uno agrupa una
    funcionalidad completa para que sea comodo de leer y ampliar:
      1) MODO CLARO / OSCURO
+     
      2) NAVEGACION ENTRE VISTAS (login -> panel)
+     
      3) ALMACENAMIENTO DE NOTAS (guardar / leer en el navegador)
+     
      4) PINTAR NOTAS EN PANTALLA
+     
      5) MODAL: CREAR Y EDITAR NOTA
      6) ELIMINAR NOTA
      7) BUSCADOR DE NOTAS
