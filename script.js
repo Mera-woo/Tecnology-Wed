@@ -13,9 +13,8 @@
    ================================================================= */
 
 
-/* =================================================================
-   1) MODO CLARO / OSCURO
-   ----------------------------------------------------------------- */
+/*1) MODO CLARO / OSCURO */
+
 let darkmode = localStorage.getItem('darkMode');
 const alternarModo = document.getElementById('cambiarModo');
 
@@ -38,9 +37,8 @@ alternarModo.addEventListener('click', () => {
 });
 
 
-/* =================================================================
-   2) NAVEGACION ENTRE VISTAS (login -> panel)
-   ----------------------------------------------------------------- */
+/* 2) NAVEGACION ENTRE VISTAS (login -> panel)*/
+
 const vistaLogin = document.getElementById('vistaLogin');
 const vistaPanel = document.getElementById('vistaPanel');
 const btnIniciarSesion = document.getElementById('btnIniciarSesion');
@@ -54,12 +52,11 @@ const mostrarPanel = () => {
 btnIniciarSesion.addEventListener('click', mostrarPanel);
 
 
-/* =================================================================
-   3) ALMACENAMIENTO DE NOTAS
-   -----------------------------------------------------------------
-   Las notas se guardan en el navegador (localStorage) como un
-   arreglo de objetos. Cada nota tiene: id, titulo, contenido y fecha.
-   ----------------------------------------------------------------- */
+/*3) ALMACENAMIENTO DE NOTAS
+  
+   PD:Las notas se guardan en el navegador (localStorage) como un
+   arreglo de objetos. Cada nota tiene: id, titulo, contenido y fecha. */
+
 const CLAVE_NOTAS = 'pnotas_notas';
 
 let notas = JSON.parse(localStorage.getItem(CLAVE_NOTAS)) || [];
@@ -69,9 +66,8 @@ const guardarEnMemoria = () => {
 };
 
 
-/* =================================================================
-   4) PINTAR NOTAS EN PANTALLA
-   ----------------------------------------------------------------- */
+/* 4) PINTAR NOTAS EN PANTALLA*/
+
 const listaNotas = document.getElementById('listaNotas');
 const mensajeVacio = document.getElementById('mensajeVacio');
 const inputBuscar = document.getElementById('inputBuscar');
@@ -130,9 +126,8 @@ const renderizarNotas = () => {
 };
 
 
-/* =================================================================
-   5) MODAL: CREAR Y EDITAR NOTA
-   ----------------------------------------------------------------- */
+/*5) MODAL: CREAR Y EDITAR NOTA*/
+
 const modalNota = document.getElementById('modalNota');
 const modalTitulo = document.getElementById('modalTitulo');
 const inputTitulo = document.getElementById('inputTitulo');
@@ -213,9 +208,8 @@ modalNota.addEventListener('click', (e) => {
 });
 
 
-/* =================================================================
-   6) ELIMINAR NOTA
-   ----------------------------------------------------------------- */
+/* 6) ELIMINAR NOTA*/
+
 const eliminarNota = (id) => {
     const confirmar = window.confirm('¿Seguro que quieres eliminar esta nota?');
     if (!confirmar) return;
@@ -226,8 +220,7 @@ const eliminarNota = (id) => {
 };
 
 
-/* =================================================================
-   7) BUSCADOR DE NOTAS
-   ----------------------------------------------------------------- */
+/*7) BUSCADOR DE NOTAS*/
+
 inputBuscar.addEventListener('input', renderizarNotas);
 
