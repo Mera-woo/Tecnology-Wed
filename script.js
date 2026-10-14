@@ -50,13 +50,14 @@ const mostrarPanel = () => {
     renderizarNotas(); // Pinta las notas cargadas desde el JSON inmediatamente
 };
 
-const mostrarPanel = () => {
+const volverInicio = () => {
     vistaLogin.classList.remove('oculto');
     vistaPanel.classList.add('oculto');
     renderizarNotas(); // Pinta las notas cargadas desde el JSON inmediatamente
 };
 
 btnIniciarSesion.addEventListener('click', mostrarPanel);
+logoBtn.addEventListener('click', volverInicio);
 
 
 /*3) ALMACENAMIENTO DE NOTAS Y CARGA DESDE JSON */
