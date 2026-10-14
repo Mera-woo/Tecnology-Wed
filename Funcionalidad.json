@@ -1,1 +1,108 @@
+/* --- Funciones añadidas: exportar, importar, validar y sync --- */
 
+// Exportar notas a archivo .json
+const exportNotesToFile = () => {
+  const payload = {
+    schemaVersion: 1,
+    exportedAt: new Date().toISOString(),
+    notes
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'pnotas_export.json';
+  a.click();
+  URL.revokeObjectURL(url);
+};
+
+// Validar una nota básica (devuelve true si tiene campos mínimos)
+const validateNote = (n) => {
+  return n &&
+    (typeof n.id === 'number' || typeof n.id === 'string') &&
+    typeof n.titulo === 'string' &&
+    typeof n.contenido === 'string' &&
+    (typeof n.fecha === 'number' || typeof n.fecha === 'string');
+};
+
+// Migrar nota para asegurar fecha en ISO string (no muta si ya está en ISO)
+const migrateNote = (n) => {
+  const nota = { ...n };
+  if (typeof nota.fecha === 'number') {
+    nota.fecha = new Date(nota.fecha).toISOString();
+  }
+  return nota;
+};
+
+// Importar desde un File object (usado por input[type=file])
+const importNotesFromFile = (file, { merge = true } = {}) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      try {
+        const parsed = JSON.parse(evt.target.result);
+        let importedArray = null;
+
+        if (Array.isArray(parsed)) {
+          // antiguo formato: el JSON es directamente un arreglo de notas
+          importedArray = parsed;
+        } else if (parsed && Array.isArray(parsed.notes)) {
+          importedArray = parsed.notes;
+        } else {
+          throw new Error('Formato JSON inválido: no se encuentra "notes" ni es un arreglo.');
+        }
+
+        // validar y migrar
+        const ok = importedArray
+          .filter(validateNote)
+          .map(migrateNote);
+
+        if (!merge) {
+          notas = ok;
+        } else {
+          // Evitar duplicados por id: mantenemos las existentes y añadimos nuevas (por id)
+          const existingIds = new Set(notas.map(n => String(n.id)));
+          const toAdd = ok.filter(n => !existingIds.has(String(n.id)));
+          notas = [...toAdd, ...notas];
+        }
+        guardarEnMemoria();
+        renderizarNotas();
+        resolve({ added: ok.length });
+      } catch (error) {
+        reject(error);
+      }
+    };
+    reader.onerror = () => reject(new Error('No se pudo leer el archivo'));
+    reader.readAsText(file);
+  });
+};
+
+// Ejemplo simple de subir notas a un servidor (POST)
+// Debes tener una API en el servidor que acepte JSON en /api/notes
+const uploadNotesToServer = async (url = '/api/notes') => {
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ notes })
+  });
+  if (!res.ok) throw new Error('Error subiendo notas: ' + res.statusText);
+  return res.json();
+};
+
+// Ejemplo simple de descargar notas desde servidor (GET y merge)
+const downloadNotesFromServer = async (url = '/api/notes') => {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('Error bajando notas: ' + res.statusText);
+  const data = await res.json();
+  // data puede ser { notes: [...] } o un arreglo
+  const incoming = Array.isArray(data) ? data : (data.notes || []);
+  const ok = incoming.filter(validateNote).map(migrateNote);
+  const existingIds = new Set(notas.map(n => String(n.id)));
+  const toAdd = ok.filter(n => !existingIds.has(String(n.id)));
+  notas = [...toAdd, ...notas];
+  guardarEnMemoria();
+  renderizarNotas();
+  return { added: toAdd.length };
+};
+
+/* --- Fin de funciones añadidas --- */
