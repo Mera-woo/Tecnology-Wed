@@ -224,3 +224,12 @@ const eliminarNota = (id) => {
 
 inputBuscar.addEventListener('input', renderizarNotas);
 
+/**/
+
+document.addEventListener('DOMContentLoaded', () => {
+    const contenedorVidrio = document.getElementById('glassContainerMain');
+    setTimeout (() => {
+        contenedorVidrio.classList.add('visible');
+    }, 100);
+})
+
