@@ -39,6 +39,7 @@ alternarModo.addEventListener('click', () => {
 
 /* 2) NAVEGACION ENTRE VISTAS (login -> panel)*/
 
+const logoBtn = document.getElementById('logoBtn');
 const vistaLogin = document.getElementById('vistaLogin');
 const vistaPanel = document.getElementById('vistaPanel');
 const btnIniciarSesion = document.getElementById('btnIniciarSesion');
@@ -46,6 +47,12 @@ const btnIniciarSesion = document.getElementById('btnIniciarSesion');
 const mostrarPanel = () => {
     vistaLogin.classList.add('oculto');
     vistaPanel.classList.remove('oculto');
+    renderizarNotas(); // Pinta las notas cargadas desde el JSON inmediatamente
+};
+
+const mostrarPanel = () => {
+    vistaLogin.classList.remove('oculto');
+    vistaPanel.classList.add('oculto');
     renderizarNotas(); // Pinta las notas cargadas desde el JSON inmediatamente
 };
 
