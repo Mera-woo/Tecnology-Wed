@@ -171,6 +171,23 @@ body::after {
 
 /*  CONTENEDOR GLASS (efecto vidrio reutilizable) */
 
+.glassContainerMain {
+    background-color: var(--primary-color-glass);
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    border-radius: 50px;
+    border: 1px solid var(--glass-edge-dim);
+    border-top-color: var(--glass-edge-light);
+    border-left-color: var(--glass-edge-light);
+    box-shadow: var(--glass-shadow);
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+.glassContainerMain.visible {
+    opacity: 1;
+}
+
 .glassContainer {
     background-color: var(--primary-color-glass);
     backdrop-filter: blur(18px) saturate(160%);
@@ -192,7 +209,7 @@ body::after {
     align-items: center;
 }
 
-.inFlex .glassContainer {
+.inFlex .glassContainerMain {
     height: 450px;
     width: 400px;
     max-width: 90vw;
