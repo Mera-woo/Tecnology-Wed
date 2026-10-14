@@ -52,10 +52,10 @@ const mostrarPanel = () => {
 btnIniciarSesion.addEventListener('click', mostrarPanel);
 
 
-/*3) ALMACENAMIENTO DE NOTAS
-  
-   PD:Las notas se guardan en el navegador (localStorage) como un
-   arreglo de objetos. Cada nota tiene: id, titulo, contenido y fecha. */
+/*3) ALMACENAMIENTO DE NOTAS Y CARGA DESDE JSON
+ 
+    PD: Las notas se guardan en el navegador (localStorage) como un
+    arreglo de objetos. Cada nota tiene: id, titulo, contenido y fecha. */
 
 const CLAVE_NOTAS = 'pnotas_notas';
 
@@ -65,6 +65,30 @@ const guardarEnMemoria = () => {
     localStorage.setItem(CLAVE_NOTAS, JSON.stringify(notas));
 };
 
+// Función para cargar notas predeterminadas desde un archivo JSON si no hay nada guardado
+const cargarNotasDesdeJSON = async () => {
+    // Solo cargamos el JSON si el usuario no tiene notas registradas en su navegador
+    if (notas.length === 0) {
+        try {
+            const respuesta = await fetch('Funcionalidad.json');
+            if (!respuesta.ok) throw new Error('No se pudo cargar el archivo JSON.');
+            
+            const notasJson = await respuesta.json();
+            
+            // Asignamos las notas del JSON al arreglo principal
+            notas = notasJson.map(n => ({
+                id: n.id || Date.now() + Math.random(), // Asegura un ID único
+                titulo: n.titulo || 'Sin título',
+                contenido: n.contenido || n.descripcion || '',
+                fecha: n.fecha ? new Date(n.fecha).getTime() : Date.now()
+            }));
+
+            guardarEnMemoria();
+        } catch (error) {
+            console.error('Aviso: No se pudo cargar Funcionalidad.json o está vacío.', error);
+        }
+    }
+};
 
 /* 4) PINTAR NOTAS EN PANTALLA*/
 
