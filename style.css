@@ -1,7 +1,27 @@
+/* =================================================================
+   PNotas - Estilos
+   -----------------------------------------------------------------
+   Lenguaje visual: vidrio (glass) para las superficies grandes y
+   neumorfismo para los controles (botones elevados, campos hundidos).
+   La paleta original (grises azulados, #3a435d, #0071ff y las
+   manchas azul/violeta) se conserva tal cual en las variables.
 
-/*  VARIABLES DE COLOR - MODO CLARO */
+     1) VARIABLES DE COLOR (claro / oscuro)
+     2) BASE
+     3) BARRA DE NAVEGACION
+     4) CONTROLES NEUMORFICOS (botones, campos, casillas)
+     5) VISTA 1: INICIAR SESION / REGISTRO
+     6) VISTA 2: PANEL DE NOTAS
+     7) MODAL, AVISOS
+     8) MOVIMIENTO Y ACCESIBILIDAD
+     9) RESPONSIVE
+   ================================================================= */
+
+
+/* 1) VARIABLES DE COLOR - MODO CLARO */
 
 :root {
+    /* Paleta original */
     --base-color1: #f7f8fb;
     --base-color2: #e6e8ee;
     --base-color3: #c8ccd6;
@@ -21,10 +41,31 @@
     --transparencia: rgba(255, 255, 255, 0);
     --orb-a: rgba(0, 113, 255, 0.4);
     --orb-b: rgba(124, 92, 255, 0.3);
+
+    /* Derivadas (neumorfismo, texto secundario, estados) */
+    --muted: #4f5778;
+    --accent-ink: #0b57c7;
+    --accent-fill: #0062e0;
+    --danger-ink: #b3261e;
+    --raise-bg: linear-gradient(145deg, #f6f7fa, #dcdfe7);
+    --raise-bg-hover: linear-gradient(145deg, #ffffff, #e4e7ee);
+    --field-bg: rgba(46, 53, 87, 0.06);
+    --inset: inset 4px 4px 9px rgba(110, 118, 140, 0.38), inset -4px -4px 9px rgba(255, 255, 255, 0.95);
+    --inset-press: inset 3px 3px 7px rgba(46, 53, 87, 0.34), inset -2px -2px 5px rgba(255, 255, 255, 0.7);
+    --overlay: rgba(30, 36, 66, 0.42);
+    --tono-0: #0b57c7;
+    --tono-1: #5b3fd6;
+    --tono-2: #0b7a6b;
+    --tono-3: #8f5200;
+
+    --ff-display: 'Fraunces', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+    --ff-ui: 'Instrument Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    color-scheme: light;
 }
 
 
-/*  VARIABLES DE COLOR - MODO OSCURO */
+/* VARIABLES DE COLOR - MODO OSCURO */
 
 .darkMode {
     --base-color1: rgba(94, 94, 94, 1);
@@ -46,31 +87,64 @@
     --orb-b: rgba(130, 90, 230, 0.26);
     --text-color2: white;
     --transparencia: rgba(255, 255, 255, 0);
+
+    --muted: #d0d2e0;
+    --accent-ink: #8dbcff;
+    --accent-fill: #0b66e8;
+    --danger-ink: #ffb4ab;
+    --raise-bg: linear-gradient(145deg, #4b5470, #2f364d);
+    --raise-bg-hover: linear-gradient(145deg, #566082, #353d58);
+    --field-bg: rgba(0, 0, 0, 0.28);
+    --inset: inset 4px 4px 10px rgba(0, 0, 0, 0.55), inset -3px -3px 8px rgba(255, 255, 255, 0.07);
+    --inset-press: inset 3px 3px 8px rgba(0, 0, 0, 0.6), inset -2px -2px 6px rgba(255, 255, 255, 0.06);
+    --overlay: rgba(4, 6, 16, 0.62);
+    --tono-0: #8dbcff;
+    --tono-1: #c2b3ff;
+    --tono-2: #6fdcca;
+    --tono-3: #f3bf72;
+    color-scheme: dark;
 }
 
 
-/*  BASE / RESET */
+/* 2) BASE */
 
 * {
-    padding: 0px;
-    margin: 0px;
-    font-family: Arial;
+    padding: 0;
+    margin: 0;
     box-sizing: border-box;
 }
 
 html {
     height: 100%;
+    -webkit-text-size-adjust: 100%;
 }
 
 body {
     min-height: 100%;
     isolation: isolate;
+    font-family: var(--ff-ui);
+    font-size: 1rem;
+    line-height: 1.5;
+    color: var(--text-color);
     background: #5e5e5e;
     background: linear-gradient(90deg, var(--base-color1) 0%, var(--base-color2) 50%, var(--base-color3) 100%);
     background-attachment: fixed;
+    transition: color 0.25s ease;
 }
 
-/* El blur del vidrio solo se ve si hay color detras. Estas manchas no cambian el HTML. */
+button,
+input,
+textarea {
+    font: inherit;
+    color: inherit;
+}
+
+button {
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* El blur del vidrio solo se ve si hay color detras: estas manchas lo dan. */
 body::before,
 body::after {
     content: "";
@@ -102,303 +176,825 @@ body::after {
     display: none !important;
 }
 
+/* Superficies del navegador tematizadas con la paleta */
+::selection {
+    background: var(--accent-fill);
+    color: #fff;
+}
 
-/*  BARRA DE NAVEGACION */
+input,
+textarea {
+    caret-color: var(--accent-color);
+}
+
+* {
+    scrollbar-color: var(--glass-edge-dim) transparent;
+}
+
+:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 3px;
+}
+
+.saltarContenido {
+    position: absolute;
+    left: 16px;
+    top: -60px;
+    z-index: 200;
+    padding: 10px 18px;
+    border-radius: 50px;
+    background: var(--accent-fill);
+    color: #fff;
+    text-decoration: none;
+    transition: top 0.15s var(--ease-out);
+}
+
+.saltarContenido:focus {
+    top: 12px;
+}
+
+.ico {
+    width: 20px;
+    height: 20px;
+    flex: none;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.75;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.displayTitulo {
+    font-family: var(--ff-display);
+    font-weight: 600;
+    font-size: clamp(2.3rem, 1.2rem + 4.2vw, 3.9rem);
+    line-height: 1.04;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+    color: var(--text-color);
+}
+
+.titulo {
+    font-family: var(--ff-display);
+    font-weight: 600;
+    font-size: 1.85rem;
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    color: var(--text-color);
+}
+
+
+/* 3) BARRA DE NAVEGACION */
 
 .navbar {
-    list-style-type: none;
-    margin: 1px;
-    padding: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 14px clamp(16px, 4vw, 40px);
 }
 
-.navbar ul {
-    list-style-type: none;
-}
-
-.navbar li:first-child {
-    float: left;
-}
-
-.navbar li {
-    float: right;
+.marca {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: none;
+    background: none;
+    border-radius: 16px;
+    padding: 2px 8px 2px 2px;
 }
 
 .logoImg {
-    height: 56px;
-    width: 56px;
-    margin: 5px;
-    border-radius: 16px;
-    object-fit: cover;
+    width: 44px;
+    height: 44px;
+    border-radius: 13px;
     display: block;
+    box-shadow: var(--neo-shadow);
 }
 
+.marcaNombre {
+    font-family: var(--ff-display);
+    font-weight: 600;
+    font-size: 1.4rem;
+    letter-spacing: -0.02em;
+    color: var(--text-color);
+}
 
-/*  BOTON CAMBIAR MODO CLARO / OSCURO */
-
-#cambiarModo {
-    height: 70px;
-    width: 70px;
-    background-color: var(--transparencia);
-    border-color: var(--transparencia);
+.navAcciones {
     display: flex;
-    justify-content: center;
     align-items: center;
-    padding: 0px;
-    margin: 5px;
-    cursor: pointer;
+    gap: 12px;
 }
 
-#cambiarModo svg {
-    fill: var(--text-color);
-}
-
-#cambiarModo svg:first-child {
-    display: none;
-}
-
-#cambiarModo svg:last-child {
-    display: block;
-}
-
-.darkMode #cambiarModo svg:first-child {
-    display: block;
-}
-
-.darkMode #cambiarModo svg:last-child {
-    display: none;
-}
-
-
-/*  CONTENEDOR GLASS (efecto vidrio reutilizable) */
-
-.glassContainerMain {
-    background-color: var(--primary-color-glass);
-    backdrop-filter: blur(18px) saturate(160%);
-    -webkit-backdrop-filter: blur(18px) saturate(160%);
+.usuarioChip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 4px 16px 4px 4px;
     border-radius: 50px;
+    background-color: var(--primary-color-glass);
     border: 1px solid var(--glass-edge-dim);
     border-top-color: var(--glass-edge-light);
     border-left-color: var(--glass-edge-light);
-    box-shadow: var(--glass-shadow);
+    backdrop-filter: blur(14px) saturate(160%);
+    -webkit-backdrop-filter: blur(14px) saturate(160%);
+    max-width: 220px;
+}
+
+.usuarioInicial {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #fff;
+    background: linear-gradient(140deg, #7c5cff, #0071ff);
+    flex: none;
+}
+
+.usuarioNombre {
+    font-size: 0.92rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Boton circular elevado (cambiar modo, cerrar sesion) */
+.btnIcono {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: 1px solid var(--glass-edge-dim);
+    border-top-color: var(--glass-edge-light);
+    border-left-color: var(--glass-edge-light);
+    background: var(--raise-bg);
+    color: var(--text-color);
+    box-shadow: var(--neo-shadow);
+    display: grid;
+    place-items: center;
+    transition: transform 0.16s var(--ease-out), box-shadow 0.16s var(--ease-out), background 0.16s ease;
+}
+
+.btnIcono:hover {
+    background: var(--raise-bg-hover);
+}
+
+.btnIcono:active {
+    box-shadow: var(--inset-press);
+    transform: scale(0.96);
+}
+
+/* Modo claro muestra la luna (para pasar a oscuro); modo oscuro muestra el sol */
+#cambiarModo .icoSol {
+    display: none;
+}
+
+.darkMode #cambiarModo .icoLuna {
+    display: none;
+}
+
+.darkMode #cambiarModo .icoSol {
+    display: block;
+}
+
+
+/* 4) CONTROLES NEUMORFICOS */
+
+/* --- Campos hundidos --- */
+.campo {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.campo > label,
+.campo > .campoEtiqueta {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.opcional {
+    font-weight: 400;
+    color: var(--muted);
+}
+
+.campoInput {
+    width: 100%;
+    height: 50px;
+    padding: 0 20px;
+    border: 1px solid transparent;
+    border-radius: 50px;
+    background-color: var(--field-bg);
+    box-shadow: var(--inset);
+    color: var(--text-color);
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.campoInput::placeholder {
+    color: var(--muted);
+    opacity: 0.8;
+}
+
+.campoInput:hover {
+    border-color: var(--glass-edge-dim);
+}
+
+.campoInput:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: var(--inset), 0 0 0 3px color-mix(in srgb, var(--accent-color) 28%, transparent);
+}
+
+.campoInput[aria-invalid="true"] {
+    border-color: var(--danger-ink);
+}
+
+.areaModal {
+    height: auto;
+    min-height: 150px;
+    padding: 16px 20px;
+    border-radius: 24px;
+    resize: vertical;
+    line-height: 1.5;
+}
+
+.campoClave {
+    position: relative;
+}
+
+.campoClave .campoInput {
+    padding-right: 54px;
+}
+
+.verClave {
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    translate: 0 -50%;
+    width: 38px;
+    height: 38px;
+    border: none;
+    border-radius: 50%;
+    background: none;
+    color: var(--muted);
+    display: grid;
+    place-items: center;
+    transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.verClave:hover {
+    color: var(--text-color);
+    background-color: var(--field-bg);
+}
+
+.campoError {
+    display: none;
+    align-items: flex-start;
+    gap: 6px;
+    font-size: 0.84rem;
+    line-height: 1.35;
+    color: var(--danger-ink);
+}
+
+.campoError.visible {
+    display: flex;
+}
+
+.campoError::before {
+    content: "";
+    width: 15px;
+    height: 15px;
+    margin-top: 1px;
+    flex: none;
+    background-color: currentColor;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 7.5v5.5M12 16.4v.1'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 7.5v5.5M12 16.4v.1'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.campoError .enlaceBtn {
+    margin-left: 4px;
+}
+
+.campoAviso {
+    font-size: 0.82rem;
+    color: var(--muted);
+}
+
+.campoPie {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.contador {
+    margin-left: auto;
+    font-size: 0.8rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--muted);
+    white-space: nowrap;
+}
+
+/* --- Medidor de fuerza de contrasena --- */
+.fuerza {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 18px;
+}
+
+.fuerzaBarra {
+    display: flex;
+    gap: 4px;
+    flex: none;
+}
+
+.fuerzaBarra i {
+    display: block;
+    width: 30px;
+    height: 6px;
+    border-radius: 6px;
+    background-color: var(--field-bg);
+    box-shadow: var(--inset-press);
+    transition: background-color 0.25s ease;
+}
+
+.fuerza[data-nivel="1"] i:nth-child(-n+1) { background-color: #d64545; }
+.fuerza[data-nivel="2"] i:nth-child(-n+2) { background-color: #d98a1f; }
+.fuerza[data-nivel="3"] i:nth-child(-n+3) { background-color: #2f9e6b; }
+.fuerza[data-nivel="4"] i:nth-child(-n+4) { background-color: #0f9d8a; }
+
+.fuerzaTexto {
+    font-size: 0.82rem;
+    color: var(--muted);
+}
+
+/* --- Casilla neumorfica --- */
+.casilla {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.92rem;
+    cursor: pointer;
+    width: fit-content;
+    min-height: 44px;
+}
+
+.casilla input {
+    position: absolute;
     opacity: 0;
-    transition: opacity 1s ease-in-out;
+    width: 1px;
+    height: 1px;
 }
 
-.glassContainerMain.visible {
-    opacity: 1;
+.casillaCaja {
+    width: 26px;
+    height: 26px;
+    border-radius: 9px;
+    display: grid;
+    place-items: center;
+    background-color: var(--field-bg);
+    box-shadow: var(--inset);
+    color: transparent;
+    transition: background-color 0.18s ease, color 0.18s ease;
 }
 
+.casillaCaja .ico {
+    width: 16px;
+    height: 16px;
+    stroke-width: 2.4;
+}
+
+.casilla input:checked + .casillaCaja {
+    background-color: var(--accent-fill);
+    color: #fff;
+}
+
+.casilla input:focus-visible + .casillaCaja {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 3px;
+}
+
+/* --- Botones elevados --- */
+.btnAccion,
+.btnSecundario {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 48px;
+    padding: 0 26px;
+    border-radius: 50px;
+    border: 1px solid transparent;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    box-shadow: var(--neo-shadow);
+    transition: transform 0.16s var(--ease-out), box-shadow 0.16s var(--ease-out), filter 0.16s ease;
+}
+
+.btnAccion {
+    background-color: var(--accent-fill);
+    background-image: linear-gradient(160deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0) 55%);
+    color: #fff;
+}
+
+.btnSecundario {
+    background: var(--raise-bg);
+    color: var(--text-color);
+    border-color: var(--glass-edge-dim);
+}
+
+.btnAccion:hover,
+.btnSecundario:hover {
+    filter: brightness(1.08);
+    transform: translateY(-2px);
+}
+
+.btnAccion:active,
+.btnSecundario:active {
+    box-shadow: var(--inset-press);
+    transform: translateY(1px) scale(0.98);
+    filter: none;
+}
+
+.btnAccion:disabled {
+    cursor: progress;
+    filter: saturate(0.6);
+    transform: none;
+}
+
+.btnAncho {
+    width: 100%;
+}
+
+.btnAccion.cargando .btnTexto::after {
+    content: "";
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    margin-left: 10px;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-top-color: #fff;
+    border-radius: 50%;
+    vertical-align: -2px;
+    animation: gira 0.6s linear infinite;
+}
+
+.enlaceBtn {
+    border: none;
+    background: none;
+    padding: 2px 0;
+    font-weight: 600;
+    color: var(--accent-ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1.5px;
+    border-radius: 4px;
+}
+
+.enlaceBtn:hover {
+    text-decoration-thickness: 2.5px;
+}
+
+
+/* 5) VISTA 1: INICIAR SESION / REGISTRO */
+
+/* Contenedor de vidrio reutilizable */
+.glassContainerMain,
 .glassContainer {
     background-color: var(--primary-color-glass);
     backdrop-filter: blur(18px) saturate(160%);
     -webkit-backdrop-filter: blur(18px) saturate(160%);
-    border-radius: 50px;
+    border-radius: 32px;
     border: 1px solid var(--glass-edge-dim);
     border-top-color: var(--glass-edge-light);
     border-left-color: var(--glass-edge-light);
     box-shadow: var(--glass-shadow);
 }
 
-/* ================================================================= */
-/*  VISTA 1: INICIAR SESION                                          */
-/* ================================================================= */
-.inFlex {
-    height: calc(100vh - 82px);
-    display: flex;
-    justify-content: center;
+.vistaAuth {
+    max-width: 1160px;
+    min-height: calc(100vh - 80px);
+    min-height: calc(100dvh - 80px);
+    margin: 0 auto;
+    padding: 16px clamp(16px, 4vw, 40px) 56px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
     align-items: center;
+    gap: clamp(32px, 6vw, 96px);
 }
 
-.inFlex .glassContainerMain {
-    height: 450px;
-    width: 400px;
-    max-width: 90vw;
-    padding: 50px 30px;
+.authIntro {
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
+    gap: 22px;
 }
 
-.titulo {
-    margin: 30px;
+.authBajada {
+    max-width: 44ch;
+    font-size: 1.1rem;
+    line-height: 1.55;
+    color: var(--muted);
+}
+
+/* Muestra apilada de notas (ejemplo) */
+.muestraNotas {
+    position: relative;
+    height: 300px;
+    margin-top: 28px;
+    max-width: 420px;
+}
+
+.notaMuestra {
+    position: absolute;
+    width: min(330px, 86%);
+    padding: 22px 24px;
+    border-radius: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background-color: var(--primary-color-glass);
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    border: 1px solid var(--glass-edge-dim);
+    border-top-color: var(--glass-edge-light);
+    border-left-color: var(--glass-edge-light);
+    box-shadow: var(--glass-shadow);
+}
+
+.notaMuestra h3 {
+    font-family: var(--ff-display);
+    font-weight: 600;
+    font-size: 1.2rem;
+    letter-spacing: -0.01em;
+}
+
+.notaMuestra p {
+    font-size: 0.93rem;
+    line-height: 1.5;
+    color: var(--muted);
+}
+
+.notaMuestraFondo {
+    right: 0;
+    top: 0;
+    rotate: 4deg;
+    opacity: 0.85;
+}
+
+.notaMuestraFrente {
+    left: 0;
+    top: 116px;
+    rotate: -2.5deg;
+}
+
+.notaMuestraFecha {
+    font-size: 0.76rem;
+    color: var(--muted);
+}
+
+/* Tarjeta de autenticacion */
+.authCard {
+    width: 100%;
+    max-width: 450px;
+    justify-self: end;
+    padding: clamp(26px, 4vw, 40px);
+    animation: entraCard 0.7s var(--ease-out) both;
+}
+
+.authForm {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.authForm.entra {
+    animation: entraForm 0.32s var(--ease-out) both;
+}
+
+.authSub {
+    margin-top: -10px;
+    font-size: 0.95rem;
+    color: var(--muted);
+}
+
+.authForm .btnAccion {
+    margin-top: 6px;
+}
+
+.authCambio {
+    text-align: center;
+    font-size: 0.93rem;
+    color: var(--muted);
+}
+
+/* Aviso dentro del formulario (ej. "no encontramos tu correo") */
+.avisoForm {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 12px 16px;
+    border-radius: 18px;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    background-color: color-mix(in srgb, var(--accent-color) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-color) 35%, transparent);
     color: var(--text-color);
-
-    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-    font-size: 2rem;
-    font-weight: 700;
-    letter-spacing: 0.5px;
 }
 
-/* Campos e input de la vista de login (se reutilizan en el modal) */
-.email,
-.psw {
-    border-color: rgba(255, 255, 255, 0);
-    box-shadow: var(--neo-shadow);
-    background-color: var(--primary-color);
-    color: var(--text-color2);
-    font-family: 'Segoe UI';
-    border-radius: 50px;
-    width: 300px;
-    max-width: 100%;
-    height: 27px;
-    margin: 20px;
-    padding: 0 16px;
+.avisoForm .ico {
+    width: 18px;
+    height: 18px;
+    margin-top: 1px;
+    color: var(--accent-ink);
 }
 
-.email::placeholder,
-.psw::placeholder {
-    color: rgba(255, 255, 255, 0.6);
+.avisoForm.error {
+    background-color: color-mix(in srgb, var(--danger-ink) 12%, transparent);
+    border-color: color-mix(in srgb, var(--danger-ink) 40%, transparent);
 }
 
-.btnIniciarSesion {
-    border-color: rgba(255, 255, 255, 0);
-    box-shadow: var(--neo-shadow);
-    background-color: var(--primary-color);
-    color: var(--text-color2);
-    font-family: 'Segoe UI';
-    border-radius: 50px;
-    width: 175px;
-    height: 27px;
-    margin-top: 120px;
-    cursor: pointer;
-    transition: transform 0.15s ease, background-color 0.15s ease;
+.avisoForm.error .ico {
+    color: var(--danger-ink);
 }
 
-.btnIniciarSesion:hover {
-    background-color: var(--accent-color);
-    transform: translateY(-2px);
+.campoError.sacude,
+.avisoForm.sacude {
+    animation: sacude 0.32s var(--ease-out);
 }
 
-.btnIniciarSesion:active,
-.btnAccion:active,
-.btnSecundario:active,
-.notaBtnIcono:active {
-    box-shadow: inset 3px 3px 7px rgba(0, 0, 0, 0.35), inset -2px -2px 5px rgba(255, 255, 255, 0.12);
-    transform: translateY(1px);
-}
 
-/* ================================================================= */
-/*  VISTA 2: PANEL PRINCIPAL DE NOTAS                                */
-/* ================================================================= */
+/* 6) VISTA 2: PANEL PRINCIPAL DE NOTAS */
+
 .panel {
-    max-width: 1100px;
+    max-width: 1160px;
     margin: 0 auto;
-    padding: 20px 30px 60px;
+    padding: 16px clamp(16px, 4vw, 40px) 72px;
 }
 
-/* --- Encabezado del panel: titulo + buscador + boton --- */
 .panelHeader {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    align-items: center;
-    gap: 20px;
-    margin-bottom: 30px;
+    align-items: flex-end;
+    gap: 24px 32px;
+    margin-bottom: 28px;
+}
+
+.panelSaludo {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
 }
 
 .panelTitulo {
-    margin: 10px 0;
+    font-size: clamp(2rem, 1.2rem + 3vw, 3.1rem);
+    overflow-wrap: anywhere;
+}
+
+.panelResumen {
+    color: var(--muted);
+    font-size: 0.98rem;
+    font-variant-numeric: tabular-nums;
 }
 
 .panelHeaderAcciones {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
+}
+
+.buscadorCaja {
+    position: relative;
+    color: var(--muted);
+}
+
+.buscadorCaja .ico {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    translate: 0 -50%;
+    pointer-events: none;
 }
 
 .buscador {
-    border: none;
-    box-shadow: var(--neo-shadow);
-    background-color: var(--primary-color);
-    color: var(--text-color2);
-    font-family: 'Segoe UI';
+    width: 280px;
+    max-width: 100%;
+    height: 48px;
+    padding: 0 20px 0 46px;
+    border: 1px solid transparent;
     border-radius: 50px;
-    height: 40px;
-    width: 240px;
-    max-width: 60vw;
-    padding: 0 18px;
+    background-color: var(--field-bg);
+    box-shadow: var(--inset);
+    color: var(--text-color);
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
 }
 
 .buscador::placeholder {
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--muted);
+    opacity: 0.85;
 }
 
-/* --- Boton de accion principal (+ Nueva nota / Guardar) --- */
-.btnAccion {
-    border: none;
-    box-shadow: var(--neo-shadow);
-    background-color: var(--accent-color);
-    color: var(--text-color2);
-    font-family: 'Segoe UI';
-    font-weight: bold;
-    border-radius: 50px;
+.buscador:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: var(--inset), 0 0 0 3px color-mix(in srgb, var(--accent-color) 28%, transparent);
+}
+
+/* --- Filtros por materia --- */
+.filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 28px;
+}
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     height: 40px;
-    padding: 0 22px;
-    cursor: pointer;
-    transition: transform 0.15s ease, filter 0.15s ease;
-}
-
-.btnAccion:hover {
-    filter: brightness(1.1);
-    transform: translateY(-2px);
-}
-
-/* --- Boton secundario (Cancelar) --- */
-.btnSecundario {
-    border: none;
-    box-shadow: var(--neo-shadow);
-    background-color: var(--primary-color);
-    color: var(--text-color2);
-    font-family: 'Segoe UI';
+    padding: 0 18px;
     border-radius: 50px;
-    height: 40px;
-    padding: 0 22px;
-    cursor: pointer;
-    transition: transform 0.15s ease, filter 0.15s ease;
+    border: 1px solid var(--glass-edge-dim);
+    border-top-color: var(--glass-edge-light);
+    border-left-color: var(--glass-edge-light);
+    background: var(--raise-bg);
+    box-shadow: var(--neo-shadow);
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-color);
+    transition: transform 0.16s var(--ease-out), box-shadow 0.16s var(--ease-out);
 }
 
-.btnSecundario:hover {
-    filter: brightness(1.15);
-    transform: translateY(-2px);
+.chip:hover {
+    transform: translateY(-1px);
+}
+
+.chip[aria-pressed="true"] {
+    background: var(--field-bg);
+    box-shadow: var(--inset);
+    border-color: transparent;
+    color: var(--accent-ink);
+    font-weight: 700;
+}
+
+.chipNum {
+    font-size: 0.78rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--muted);
 }
 
 /* --- Mensaje cuando no hay notas --- */
 .mensajeVacio {
-    color: var(--text-color);
-    font-family: 'Segoe UI';
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+    padding: 56px 20px;
     text-align: center;
-    margin: 60px auto;
-    max-width: 420px;
-    opacity: 0.8;
 }
 
-/* ================================================================= */
-/*  LISTA DE NOTAS (rejilla de tarjetas)                             */
-/* ================================================================= */
+.mensajeVacio p {
+    max-width: 38ch;
+    font-family: var(--ff-display);
+    font-size: 1.35rem;
+    line-height: 1.35;
+    text-wrap: balance;
+}
+
+/* --- Rejilla de tarjetas (columnas: alturas distintas segun el contenido) --- */
 .listaNotas {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 20px;
+    columns: 280px;
+    column-gap: 22px;
 }
 
-/* --- Tarjeta individual de nota --- */
 .notaCard {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    break-inside: avoid;
+    margin-bottom: 22px;
+    padding: 22px 22px 16px;
+    border-radius: 26px;
     background-color: var(--primary-color-glass);
     backdrop-filter: blur(18px) saturate(160%);
     -webkit-backdrop-filter: blur(18px) saturate(160%);
-    border-radius: 26px;
     border: 1px solid var(--glass-edge-dim);
     border-top-color: var(--glass-edge-light);
     border-left-color: var(--glass-edge-light);
     box-shadow: var(--glass-shadow);
-    padding: 22px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    min-height: 180px;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    transition: transform 0.22s var(--ease-out), box-shadow 0.22s var(--ease-out);
 }
 
 .notaCard:hover {
@@ -406,124 +1002,314 @@ body::after {
     box-shadow: var(--glass-shadow-hover);
 }
 
+.notaCard.entra {
+    animation: entraNota 0.55s var(--ease-out) both;
+    animation-delay: calc(var(--i, 0) * 45ms);
+}
+
+.notaMateria {
+    align-self: flex-start;
+    padding: 3px 12px;
+    border-radius: 50px;
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--tono, var(--tono-0));
+    background-color: color-mix(in srgb, var(--tono, var(--tono-0)) 14%, transparent);
+}
+
+.notaMateria[data-tono="0"] { --tono: var(--tono-0); }
+.notaMateria[data-tono="1"] { --tono: var(--tono-1); }
+.notaMateria[data-tono="2"] { --tono: var(--tono-2); }
+.notaMateria[data-tono="3"] { --tono: var(--tono-3); }
+
 .notaCardTitulo {
-    color: var(--text-color);
-    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-    font-weight: bold;
-    font-size: 1.15rem;
-    word-break: break-word;
+    font-family: var(--ff-display);
+    font-weight: 600;
+    font-size: 1.3rem;
+    line-height: 1.2;
+    letter-spacing: -0.012em;
+    overflow-wrap: anywhere;
+    text-wrap: balance;
 }
 
 .notaCardContenido {
-    color: var(--text-color);
-    font-family: 'Segoe UI';
-    font-size: 0.95rem;
-    line-height: 1.4;
+    font-size: 0.96rem;
+    line-height: 1.55;
     white-space: pre-wrap;
-    word-break: break-word;
-    flex: 1;
-    opacity: 0.9;
+    overflow-wrap: anywhere;
+    color: var(--text-color);
+    opacity: 0.92;
+}
+
+.notaCardPie {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 6px;
 }
 
 .notaCardFecha {
-    color: var(--secondary-color);
-    font-family: 'Segoe UI';
-    font-size: 0.75rem;
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
 }
 
-/* --- Botones de cada tarjeta (editar / eliminar) --- */
 .notaCardBotones {
     display: flex;
-    gap: 10px;
-    justify-content: flex-end;
+    gap: 8px;
 }
 
 .notaBtnIcono {
-    border: none;
-    background-color: var(--primary-color);
-    color: var(--text-color2);
-    font-family: 'Segoe UI';
-    border-radius: 50px;
-    height: 34px;
-    padding: 0 16px;
-    cursor: pointer;
-    font-size: 0.85rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--glass-edge-dim);
+    border-top-color: var(--glass-edge-light);
+    border-left-color: var(--glass-edge-light);
+    background: var(--raise-bg);
+    color: var(--text-color);
     box-shadow: var(--neo-shadow);
-    transition: transform 0.15s ease, filter 0.15s ease;
+    display: grid;
+    place-items: center;
+    transition: transform 0.16s var(--ease-out), box-shadow 0.16s var(--ease-out), color 0.16s ease;
+}
+
+.notaBtnIcono .ico {
+    width: 18px;
+    height: 18px;
 }
 
 .notaBtnIcono:hover {
-    filter: brightness(1.15);
     transform: translateY(-2px);
 }
 
-.notaBtnEliminar:hover {
-    background-color: #c0392b;
-    filter: none;
+.notaBtnIcono:active {
+    box-shadow: var(--inset-press);
+    transform: scale(0.95);
 }
 
-/* ================================================================= */
-/*  MODAL: CREAR / EDITAR NOTA                                       */
-/* ================================================================= */
-.modalFondo {
-    position: fixed;
-    inset: 0;
-    background-color: rgba(0, 0, 0, 0.45);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    z-index: 100;
+.notaBtnEliminar:hover {
+    color: var(--danger-ink);
+}
+
+
+/* 7) MODAL Y AVISOS */
+
+.modalNota {
+    border: none;
+    padding: 0;
+    background: none;
+    color: var(--text-color);
+    max-width: 100vw;
+    max-height: 100dvh;
+    margin: auto;
+    overflow: visible;
+}
+
+.modalNota::backdrop {
+    background-color: var(--overlay);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+.modalNota[open] {
+    animation: entraModal 0.26s var(--ease-out) both;
+}
+
+.modalNota[open]::backdrop {
+    animation: aparece 0.26s ease both;
 }
 
 .modalCaja {
-    width: 460px;
-    max-width: 100%;
-    padding: 30px;
+    width: min(500px, calc(100vw - 24px));
+    max-height: calc(100dvh - 24px);
+    overflow-y: auto;
+    padding: clamp(22px, 4vw, 34px);
     display: flex;
     flex-direction: column;
-    align-items: center;
     gap: 18px;
+    /* El vidrio sobre el fondo oscuro del modal necesita algo mas de cuerpo */
+    background-color: color-mix(in srgb, var(--base-color2) 78%, transparent);
 }
 
-.modalTitulo {
-    margin: 10px;
-}
-
-.inputModal {
-    margin: 0;
-    height: 40px;
-    width: 100%;
-}
-
-.areaModal {
-    border: none;
-    box-shadow: var(--neo-shadow);
-    background-color: var(--primary-color);
-    color: var(--text-color2);
-    font-family: 'Segoe UI';
-    border-radius: 26px;
-    width: 100%;
-    min-height: 140px;
-    padding: 16px;
-    resize: vertical;
-}
-
-.areaModal::placeholder {
-    color: rgba(255, 255, 255, 0.6);
+.darkMode .modalCaja {
+    background-color: color-mix(in srgb, #2b2f40 82%, transparent);
 }
 
 .modalBotones {
     display: flex;
     gap: 14px;
-    justify-content: center;
-    width: 100%;
-    margin-top: 6px;
+    justify-content: flex-end;
+    margin-top: 4px;
 }
 
-/* ================================================================= */
-/*  RESPONSIVE - TELEFONO Y TABLET                                   */
-/* ================================================================= */
+.toasts {
+    position: fixed;
+    left: 50%;
+    bottom: max(20px, env(safe-area-inset-bottom));
+    translate: -50% 0;
+    z-index: 300;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: calc(100vw - 32px);
+    max-width: 440px;
+    pointer-events: none;
+}
+
+.toast {
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    padding: 10px 10px 10px 20px;
+    border-radius: 50px;
+    font-size: 0.93rem;
+    background-color: color-mix(in srgb, var(--base-color2) 82%, transparent);
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    border: 1px solid var(--glass-edge-dim);
+    border-top-color: var(--glass-edge-light);
+    box-shadow: var(--glass-shadow);
+    animation: entraToast 0.3s var(--ease-out) both;
+}
+
+.darkMode .toast {
+    background-color: color-mix(in srgb, #2b2f40 88%, transparent);
+}
+
+.toast.sale {
+    animation: saleToast 0.2s ease-in both;
+}
+
+.toast span {
+    flex: 1;
+    overflow-wrap: anywhere;
+}
+
+.toastBtn {
+    height: 36px;
+    padding: 0 16px;
+    border-radius: 50px;
+    border: none;
+    background: var(--accent-fill);
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.88rem;
+}
+
+.toastCerrar {
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 50%;
+    background: none;
+    display: grid;
+    place-items: center;
+    color: var(--muted);
+}
+
+.toastCerrar .ico {
+    width: 16px;
+    height: 16px;
+}
+
+
+/* 8) MOVIMIENTO */
+
+@keyframes gira { to { rotate: 360deg; } }
+
+@keyframes entraCard {
+    from { opacity: 0; translate: 0 18px; filter: blur(6px); }
+    to   { opacity: 1; translate: 0 0; filter: blur(0); }
+}
+
+@keyframes entraForm {
+    from { opacity: 0; translate: 0 8px; }
+    to   { opacity: 1; translate: 0 0; }
+}
+
+@keyframes entraNota {
+    from { opacity: 0; translate: 0 16px; filter: blur(5px); }
+    to   { opacity: 1; translate: 0 0; filter: blur(0); }
+}
+
+@keyframes entraModal {
+    from { opacity: 0; transform: scale(0.96) translateY(8px); }
+    to   { opacity: 1; transform: none; }
+}
+
+@keyframes aparece { from { opacity: 0; } to { opacity: 1; } }
+
+@keyframes entraToast {
+    from { opacity: 0; translate: 0 14px; }
+    to   { opacity: 1; translate: 0 0; }
+}
+
+@keyframes saleToast {
+    to { opacity: 0; translate: 0 8px; }
+}
+
+@keyframes sacude {
+    25% { translate: -5px 0; }
+    55% { translate: 4px 0; }
+    80% { translate: -2px 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-delay: 0s !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Sin soporte de vidrio: fondo mas opaco para que el texto siga legible */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .glassContainerMain,
+    .glassContainer,
+    .notaCard,
+    .notaMuestra {
+        background-color: color-mix(in srgb, var(--base-color2) 92%, transparent);
+    }
+}
+
+
+/* 9) RESPONSIVE - TELEFONO Y TABLET */
+
+@media (max-width: 900px) {
+    .vistaAuth {
+        grid-template-columns: minmax(0, 1fr);
+        min-height: 0;
+        gap: 28px;
+        padding-top: 8px;
+    }
+
+    .authIntro {
+        gap: 14px;
+        text-align: left;
+    }
+
+    .authBajada {
+        font-size: 1rem;
+    }
+
+    .muestraNotas {
+        display: none;
+    }
+
+    .authCard {
+        justify-self: center;
+        max-width: 520px;
+    }
+}
+
 @media (max-width: 600px) {
     body::before,
     body::after {
@@ -541,22 +1327,35 @@ body::after {
         bottom: 6%;
     }
 
-    .inFlex .glassContainer {
-        height: auto;
-        padding: 40px 20px;
+    .navbar {
+        padding-top: 10px;
+        padding-bottom: 10px;
     }
 
-    .btnIniciarSesion {
-        margin-top: 60px;
+    .navAcciones {
+        gap: 8px;
     }
 
-    .panel {
-        padding: 16px 16px 40px;
+    .usuarioChip {
+        padding-right: 4px;
+    }
+
+    .usuarioNombre {
+        display: none;
+    }
+
+    .marcaNombre {
+        font-size: 1.25rem;
+    }
+
+    .titulo {
+        font-size: 1.6rem;
     }
 
     .panelHeader {
         flex-direction: column;
         align-items: stretch;
+        gap: 18px;
     }
 
     .panelHeaderAcciones {
@@ -566,481 +1365,41 @@ body::after {
 
     .buscador {
         width: 100%;
-        max-width: none;
     }
 
-    .btnAccion {
+    .panelHeaderAcciones .btnAccion {
         width: 100%;
     }
 
+    /* Una sola columna en el telefono */
     .listaNotas {
-        grid-template-columns: 1fr;
+        columns: 1;
     }
 
-    .titulo {
-        margin: 16px;
-        font-size: 1.6rem;
-    }
-}/* ================================================================= */
-/*  BASE / RESET                                                     */
-/* ================================================================= */
-* {
-    padding: 0px;
-    margin: 0px;
-    font-family: Arial;
-    box-sizing: border-box;
-}
-
-html {
-    height: 100%;
-}
-
-body {
-    min-height: 100%;
-    background: #5e5e5e;
-    background: linear-gradient(90deg, var(--base-color1) 0%, var(--base-color2) 50%, var(--base-color3) 100%);
-    background-attachment: fixed;
-}
-
-/* Utilidad para ocultar vistas sin borrarlas del DOM */
-.oculto {
-    display: none !important;
-}
-
-/* ================================================================= */
-/*  BARRA DE NAVEGACION                                              */
-/* ================================================================= */
-.navbar {
-    list-style-type: none;
-    margin: 1px;
-    padding: 1px;
-}
-
-.navbar ul {
-    list-style-type: none;
-}
-
-.navbar li:first-child {
-    float: left;
-}
-
-.navbar li {
-    float: right;
-}
-
-.logoImg {
-    height: 56px;
-    width: 56px;
-    margin: 5px;
-    border-radius: 16px;
-    object-fit: cover;
-    display: block;
-}
-
-/* ================================================================= */
-/*  BOTON CAMBIAR MODO CLARO / OSCURO                                */
-/* ================================================================= */
-#cambiarModo {
-    height: 70px;
-    width: 70px;
-    background-color: var(--transparencia);
-    border-color: var(--transparencia);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0px;
-    margin: 5px;
-    cursor: pointer;
-}
-
-#cambiarModo svg {
-    fill: var(--text-color);
-}
-
-#cambiarModo svg:first-child {
-    display: none;
-}
-
-#cambiarModo svg:last-child {
-    display: block;
-}
-
-.darkMode #cambiarModo svg:first-child {
-    display: block;
-}
-
-.darkMode #cambiarModo svg:last-child {
-    display: none;
-}
-
-/* ================================================================= */
-/*  CONTENEDOR GLASS (efecto vidrio reutilizable)                    */
-/* ================================================================= */
-.glassContainer {
-    background-color: var(--primary-color-glass);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-radius: 50px;
-    border-top: 1px solid rgba(255, 255, 255, 0.40);
-    border-right: 1px solid rgba(255, 255, 255, 0.30);
-    box-shadow: 2px 2px 2px var(--primary-color-shadow);
-}
-
-/* ================================================================= */
-/*  VISTA 1: INICIAR SESION                                          */
-/* ================================================================= */
-.inFlex {
-    height: calc(100vh - 82px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.inFlex .glassContainer {
-    height: 450px;
-    width: 400px;
-    max-width: 90vw;
-    padding: 50px 30px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-}
-
-.titulo {
-    margin: 30px;
-    color: var(--text-color);
-
-    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-    font-size: 2rem;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-}
-
-/* Campos e input de la vista de login (se reutilizan en el modal) */
-.email,
-.psw {
-    border-color: rgba(255, 255, 255, 0);
-    box-shadow: 1px 1px 1px var(--primary-color-shadow);
-    background-color: var(--primary-color);
-    color: var(--text-color2);
-    font-family: 'Segoe UI';
-    border-radius: 50px;
-    width: 300px;
-    max-width: 100%;
-    height: 27px;
-    margin: 20px;
-    padding: 0 16px;
-}
-
-.email::placeholder,
-.psw::placeholder {
-    color: rgba(255, 255, 255, 0.6);
-}
-
-.btnIniciarSesion {
-    border-color: rgba(255, 255, 255, 0);
-    box-shadow: 1px 1px 1px var(--primary-color-shadow);
-    background-color: var(--primary-color);
-    color: var(--text-color2);
-    font-family: 'Segoe UI';
-    border-radius: 50px;
-    width: 175px;
-    height: 27px;
-    margin-top: 120px;
-    cursor: pointer;
-    transition: transform 0.15s ease, background-color 0.15s ease;
-}
-
-.btnIniciarSesion:hover {
-    background-color: var(--accent-color);
-    transform: translateY(-2px);
-}
-
-/* ================================================================= */
-/*  VISTA 2: PANEL PRINCIPAL DE NOTAS                                */
-/* ================================================================= */
-.panel {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 20px 30px 60px;
-}
-
-/* --- Encabezado del panel: titulo + buscador + boton --- */
-.panelHeader {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
-    margin-bottom: 30px;
-}
-
-.panelTitulo {
-    margin: 10px 0;
-}
-
-.panelHeaderAcciones {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 12px;
-}
-
-.buscador {
-    border: none;
-    box-shadow: 1px 1px 1px var(--primary-color-shadow);
-    background-color: var(--primary-color);
-    color: var(--text-color2);
-    font-family: 'Segoe UI';
-    border-radius: 50px;
-    height: 40px;
-    width: 240px;
-    max-width: 60vw;
-    padding: 0 18px;
-}
-
-.buscador::placeholder {
-    color: rgba(255, 255, 255, 0.6);
-}
-
-/* --- Boton de accion principal (+ Nueva nota / Guardar) --- */
-.btnAccion {
-    border: none;
-    box-shadow: 1px 1px 1px var(--primary-color-shadow);
-    background-color: var(--accent-color);
-    color: var(--text-color2);
-    font-family: 'Segoe UI';
-    font-weight: bold;
-    border-radius: 50px;
-    height: 40px;
-    padding: 0 22px;
-    cursor: pointer;
-    transition: transform 0.15s ease, filter 0.15s ease;
-}
-
-.btnAccion:hover {
-    filter: brightness(1.1);
-    transform: translateY(-2px);
-}
-
-/* --- Boton secundario (Cancelar) --- */
-.btnSecundario {
-    border: none;
-    box-shadow: 1px 1px 1px var(--primary-color-shadow);
-    background-color: var(--primary-color);
-    color: var(--text-color2);
-    font-family: 'Segoe UI';
-    border-radius: 50px;
-    height: 40px;
-    padding: 0 22px;
-    cursor: pointer;
-    transition: transform 0.15s ease, filter 0.15s ease;
-}
-
-.btnSecundario:hover {
-    filter: brightness(1.15);
-    transform: translateY(-2px);
-}
-
-/* --- Mensaje cuando no hay notas --- */
-.mensajeVacio {
-    color: var(--text-color);
-    font-family: 'Segoe UI';
-    text-align: center;
-    margin: 60px auto;
-    max-width: 420px;
-    opacity: 0.8;
-}
-
-/* ================================================================= */
-/*  LISTA DE NOTAS (rejilla de tarjetas)                             */
-/* ================================================================= */
-.listaNotas {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 20px;
-}
-
-/* --- Tarjeta individual de nota --- */
-.notaCard {
-    background-color: var(--primary-color-glass);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-radius: 26px;
-    border-top: 1px solid rgba(255, 255, 255, 0.40);
-    border-right: 1px solid rgba(255, 255, 255, 0.30);
-    box-shadow: 2px 2px 6px var(--primary-color-shadow);
-    padding: 22px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    min-height: 180px;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-.notaCard:hover {
-    transform: translateY(-4px);
-    box-shadow: 4px 6px 12px var(--primary-color-shadow);
-}
-
-.notaCardTitulo {
-    color: var(--text-color);
-    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-    font-weight: bold;
-    font-size: 1.15rem;
-    word-break: break-word;
-}
-
-.notaCardContenido {
-    color: var(--text-color);
-    font-family: 'Segoe UI';
-    font-size: 0.95rem;
-    line-height: 1.4;
-    white-space: pre-wrap;
-    word-break: break-word;
-    flex: 1;
-    opacity: 0.9;
-}
-
-.notaCardFecha {
-    color: var(--secondary-color);
-    font-family: 'Segoe UI';
-    font-size: 0.75rem;
-}
-
-/* --- Botones de cada tarjeta (editar / eliminar) --- */
-.notaCardBotones {
-    display: flex;
-    gap: 10px;
-    justify-content: flex-end;
-}
-
-.notaBtnIcono {
-    border: none;
-    background-color: var(--primary-color);
-    color: var(--text-color2);
-    font-family: 'Segoe UI';
-    border-radius: 50px;
-    height: 34px;
-    padding: 0 16px;
-    cursor: pointer;
-    font-size: 0.85rem;
-    box-shadow: 1px 1px 1px var(--primary-color-shadow);
-    transition: transform 0.15s ease, filter 0.15s ease;
-}
-
-.notaBtnIcono:hover {
-    filter: brightness(1.15);
-    transform: translateY(-2px);
-}
-
-.notaBtnEliminar:hover {
-    background-color: #c0392b;
-    filter: none;
-}
-
-/* ================================================================= */
-/*  MODAL: CREAR / EDITAR NOTA                                       */
-/* ================================================================= */
-.modalFondo {
-    position: fixed;
-    inset: 0;
-    background-color: rgba(0, 0, 0, 0.45);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    z-index: 100;
-}
-
-.modalCaja {
-    width: 460px;
-    max-width: 100%;
-    padding: 30px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 18px;
-}
-
-.modalTitulo {
-    margin: 10px;
-}
-
-.inputModal {
-    margin: 0;
-    height: 40px;
-    width: 100%;
-}
-
-.areaModal {
-    border: none;
-    box-shadow: 1px 1px 1px var(--primary-color-shadow);
-    background-color: var(--primary-color);
-    color: var(--text-color2);
-    font-family: 'Segoe UI';
-    border-radius: 26px;
-    width: 100%;
-    min-height: 140px;
-    padding: 16px;
-    resize: vertical;
-}
-
-.areaModal::placeholder {
-    color: rgba(255, 255, 255, 0.6);
-}
-
-.modalBotones {
-    display: flex;
-    gap: 14px;
-    justify-content: center;
-    width: 100%;
-    margin-top: 6px;
-}
-
-/* ================================================================= */
-/*  RESPONSIVE - TELEFONO Y TABLET                                   */
-/* ================================================================= */
-@media (max-width: 600px) {
-    .inFlex .glassContainer {
-        height: auto;
-        padding: 40px 20px;
+    .filtros {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        margin-inline: calc(-1 * clamp(16px, 4vw, 40px));
+        padding: 4px clamp(16px, 4vw, 40px) 12px;
+        scrollbar-width: none;
     }
 
-    .btnIniciarSesion {
-        margin-top: 60px;
+    .chip {
+        flex: none;
     }
 
-    .panel {
-        padding: 16px 16px 40px;
+    .modalBotones .btnAccion,
+    .modalBotones .btnSecundario {
+        flex: 1;
     }
+}
 
-    .panelHeader {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .panelHeaderAcciones {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .buscador {
-        width: 100%;
-        max-width: none;
-    }
-
-    .btnAccion {
-        width: 100%;
-    }
-
-    .listaNotas {
-        grid-template-columns: 1fr;
-    }
-
-    .titulo {
-        margin: 16px;
-        font-size: 1.6rem;
+@media (hover: none) {
+    .notaCard:hover,
+    .btnAccion:hover,
+    .btnSecundario:hover,
+    .chip:hover,
+    .notaBtnIcono:hover {
+        transform: none;
     }
 }

@@ -1,14 +1,35 @@
-[
-  {
-    "id": 1,
-    "titulo": "Uribe el Duro",
-    "contenido": "No se salva e nadie de que lo raspe.",
-    "fecha": "2026-10-10"
-  },
-  {
-    "id": 2,
-    "titulo": "A nosotros",
-    "contenido": "No nos salva nadie de que nos raspe",
-    "fecha": "2026-10-14"
-  }
-]
+{
+  "version": 2,
+  "descripcion": "Datos iniciales de PNotas. 'usuarios' son cuentas de prueba (clave con PBKDF2-SHA256, 120000 iteraciones). 'notas' se copian a cada cuenta nueva la primera vez que entra.",
+  "usuarios": [
+    {
+      "nombre": "Estudiante Demo",
+      "correo": "demo@pnotas.edu",
+      "sal": "pnotas-demo-salt",
+      "clave": "de5f5b532e541b5afe8245d471a870f7bebd6867940bfb2cab6763ec2914cfb9"
+    }
+  ],
+  "notas": [
+    {
+      "id": 1,
+      "titulo": "Uribe el Duro",
+      "contenido": "No se salva e nadie de que lo raspe.",
+      "fecha": "2026-10-10",
+      "materia": "General"
+    },
+    {
+      "id": 2,
+      "titulo": "A nosotros",
+      "contenido": "No nos salva nadie de que nos raspe",
+      "fecha": "2026-10-14",
+      "materia": "General"
+    },
+    {
+      "id": 3,
+      "titulo": "Bienvenido a PNotas",
+      "contenido": "Toca \"Nueva nota\" para escribir tus apuntes. Ponles una materia para filtrarlos después, y usa el buscador para encontrar cualquier cosa por título o contenido.\n\nTus notas se guardan en este navegador, así que no se pierden al cerrar la pestaña.",
+      "fecha": "2026-10-28",
+      "materia": "PNotas"
+    }
+  ]
+}

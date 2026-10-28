@@ -17,8 +17,6 @@ una manera de almacenar toda la informacion para el estudiante.
 
     4)<!--  FUNCIONALIDAD: CREAR / EDITAR NOTA -->
 
-
-
 /* =================================================================
 
    PNotas - Motor de la aplicacion
@@ -43,3 +41,20 @@ una manera de almacenar toda la informacion para el estudiante.
      7) BUSCADOR DE NOTAS
      
    ================================================================= */
+
+## Cómo ejecutarlo
+
+Abre la carpeta con un servidor local (por ejemplo `python3 -m http.server`) y entra a `http://localhost:8000`.
+Hace falta servidor porque `Funcionalidad.json` se carga con `fetch`.
+
+Cuenta de prueba: `demo@pnotas.edu` / `Pnotas2026`
+
+## Qué incluye
+
+- Inicio de sesión con validaciones (correo, contraseña, intentos limitados). Si el correo no está registrado, se abre el registro con el correo ya escrito.
+- Registro con validación de nombre, correo duplicado, contraseña (8+ caracteres, letra y número, medidor de fuerza) y confirmación.
+- Notas separadas por cuenta, con materia, filtros, buscador y "Deshacer" al eliminar.
+- Diseño glass + neumorfismo, modo claro/oscuro, responsive.
+- `Funcionalidad.json` (v2): `usuarios` de prueba y `notas` iniciales (se conservan las notas originales).
+
+> Es un proyecto sin servidor: las cuentas viven en el navegador (claves con hash PBKDF2), lo cual no sustituye una autenticación real en backend.

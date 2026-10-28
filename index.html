@@ -2,36 +2,179 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>PNotas - Herramienta Universitaria</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PNotas · Tus apuntes de clase</title>
+    <meta name="description" content="PNotas: herramienta web para tomar y guardar apuntes de clase.">
+    <meta name="theme-color" content="#e6e8ee">
+    <link rel="icon" type="image/png" href="media/logo-mark.png">
+
+    <!-- Tipografias: Fraunces (titulos) + Instrument Sans (interfaz). Si no cargan, se usan tipografias del sistema. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500..700&family=Instrument+Sans:wght@400..700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="style.css">
     <script src="script.js" defer></script>
 </head>
 <body>
 
-    <!--  BARRA DE NAVEGACION (logo + boton de modo claro/oscuro) -->
+    <!-- Iconos (un solo trazo, mismo grosor en toda la app) -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+        <defs>
+            <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></symbol>
+            <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/></symbol>
+            <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="2.8"/></symbol>
+            <symbol id="i-eye-off" viewBox="0 0 24 24"><path d="M9.9 5.7A9.6 9.6 0 0 1 12 5.5c6 0 9.5 6.5 9.5 6.5a16 16 0 0 1-2.6 3.3M6.3 7.3A15.6 15.6 0 0 0 2.5 12S6 18.5 12 18.5a9.4 9.4 0 0 0 4.1-.9"/><path d="M9.9 9.9a2.8 2.8 0 0 0 4 4M3 3l18 18"/></symbol>
+            <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></symbol>
+            <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+            <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4Z"/><path d="m13.5 6.5 4 4"/></symbol>
+            <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4.5 7h15M10 3.5h4M6.5 7l.8 12a1.5 1.5 0 0 0 1.5 1.4h6.4a1.5 1.5 0 0 0 1.5-1.4l.8-12M10 11v5.5M14 11v5.5"/></symbol>
+            <symbol id="i-logout" viewBox="0 0 24 24"><path d="M14 4.5H7a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h7M10 12h10m0 0-3.5-3.5M20 12l-3.5 3.5"/></symbol>
+            <symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.4v.1"/></symbol>
+            <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.6v.1"/></symbol>
+            <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+            <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+        </defs>
+    </svg>
 
-    <nav class="navbar">
-        <ul>
-            <li><img src="media/logo.png" alt="PNotas" class="logoImg" id='logoBtn'></li>
-            <li>
-                <button id="cambiarModo" aria-label="Cambiar modo claro u oscuro">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1f1f1f"><path d="M480-120q-150 0-255-105T120-480q0-150 105-255t255-105q14 0 27.5 1t26.5 3q-41 29-65.5 75.5T444-660q0 90 63 153t153 63q55 0 101-24.5t75-65.5q2 13 3 26.5t1 27.5q0 150-105 255T480-120Z"/></svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1f1f1f"><path d="M565-395q35-35 35-85t-35-85q-35-35-85-35t-85 35q-35 35-35 85t35 85q35 35 85 35t85-35Zm-226.5 56.5Q280-397 280-480t58.5-141.5Q397-680 480-680t141.5 58.5Q680-563 680-480t-58.5 141.5Q563-280 480-280t-141.5-58.5ZM200-440H40v-80h160v80Zm720 0H760v-80h160v80ZM440-760v-160h80v160h-80Zm0 720v-160h80v160h-80ZM256-650l-101-97 57-59 96 100-52 56Zm492 496-97-101 53-55 101 97-57 59Zm-98-550 97-101 59 57-100 96-56-52ZM154-212l101-97 55 53-97 101-59-57Zm326-268Z"/></svg>
+    <a class="saltarContenido" href="#contenido">Saltar al contenido</a>
+
+    <!--  BARRA DE NAVEGACION (logo + sesion + boton de modo claro/oscuro) -->
+
+    <header class="navbar">
+        <button type="button" class="marca" id="logoBtn" aria-label="PNotas, ir al inicio">
+            <img src="media/logo-mark.png" alt="" class="logoImg" width="44" height="44">
+            <span class="marcaNombre">PNotas</span>
+        </button>
+
+        <div class="navAcciones">
+            <div class="usuarioChip oculto" id="usuarioChip">
+                <span class="usuarioInicial" id="usuarioInicial" aria-hidden="true">?</span>
+                <span class="usuarioNombre" id="usuarioNombre"></span>
+            </div>
+            <button type="button" class="btnIcono oculto" id="btnCerrarSesion" aria-label="Cerrar sesión" title="Cerrar sesión">
+                <svg class="ico" aria-hidden="true"><use href="#i-logout"/></svg>
+            </button>
+            <button type="button" class="btnIcono" id="cambiarModo" aria-label="Cambiar a modo oscuro" aria-pressed="false" title="Cambiar modo claro u oscuro">
+                <svg class="ico icoLuna" aria-hidden="true"><use href="#i-moon"/></svg>
+                <svg class="ico icoSol" aria-hidden="true"><use href="#i-sun"/></svg>
+            </button>
+        </div>
+    </header>
+
+    <main id="contenido">
+
+    <!--  VISTA 1: INICIAR SESION / REGISTRO -->
+
+    <section id="vistaLogin" class="vistaAuth">
+
+        <div class="authIntro">
+            <h1 class="displayTitulo">Cada clase,<br>anotada y a la mano.</h1>
+            <p class="authBajada">PNotas guarda tus apuntes en este navegador. Escribe, ponles materia y encuéntralos después por título o contenido.</p>
+
+            <!-- Muestra de como se ve una nota (ejemplo, no son datos reales) -->
+            <div class="muestraNotas" aria-hidden="true">
+                <article class="notaMuestra notaMuestraFondo">
+                    <span class="notaMateria" data-tono="2">Historia</span>
+                    <h3>Revoluciones industriales</h3>
+                    <p>Primera: vapor y textil. Segunda: electricidad y acero.</p>
+                </article>
+                <article class="notaMuestra notaMuestraFrente">
+                    <span class="notaMateria" data-tono="0">Cálculo II</span>
+                    <h3>Límites y continuidad</h3>
+                    <p>Si f es continua en a, el límite en a es f(a). Repasar L'Hôpital antes del parcial.</p>
+                    <span class="notaMuestraFecha">Ejemplo</span>
+                </article>
+            </div>
+        </div>
+
+        <div class="glassContainerMain authCard" id="glassContainerMain">
+
+            <!-- Formulario: iniciar sesion -->
+            <form id="formLogin" class="authForm" novalidate aria-labelledby="tituloLogin">
+                <h2 class="titulo" id="tituloLogin">Iniciar sesión</h2>
+                <p class="authSub">Entra con tu correo para ver tus notas.</p>
+
+                <div class="avisoForm oculto" id="avisoLogin" role="status"></div>
+
+                <div class="campo">
+                    <label for="loginEmail">Correo electrónico</label>
+                    <input type="email" id="loginEmail" class="campoInput email" name="email" autocomplete="email" inputmode="email" placeholder="nombre@correo.com" aria-describedby="errLoginEmail" maxlength="254" required>
+                    <p class="campoError" id="errLoginEmail" role="alert"></p>
+                </div>
+
+                <div class="campo">
+                    <label for="loginPass">Contraseña</label>
+                    <div class="campoClave">
+                        <input type="password" id="loginPass" class="campoInput psw" name="password" autocomplete="current-password" placeholder="Tu contraseña" aria-describedby="errLoginPass avisoMayusLogin" maxlength="64" required>
+                        <button type="button" class="verClave" data-target="loginPass" aria-label="Mostrar contraseña" aria-pressed="false">
+                            <svg class="ico" aria-hidden="true"><use href="#i-eye"/></svg>
+                        </button>
+                    </div>
+                    <p class="campoAviso oculto" id="avisoMayusLogin">Bloq Mayús está activado.</p>
+                    <p class="campoError" id="errLoginPass" role="alert"></p>
+                </div>
+
+                <label class="casilla">
+                    <input type="checkbox" id="loginRecordar">
+                    <span class="casillaCaja" aria-hidden="true"><svg class="ico"><use href="#i-check"/></svg></span>
+                    <span>Mantener la sesión iniciada</span>
+                </label>
+
+                <button type="submit" class="btnAccion btnAncho btnIniciarSesion" id="btnIniciarSesion">
+                    <span class="btnTexto">Iniciar sesión</span>
                 </button>
-            </li>
-        </ul>
-    </nav>
 
+                <p class="authCambio">¿Primera vez aquí? <button type="button" class="enlaceBtn" id="irRegistro">Crear una cuenta</button></p>
+            </form>
 
-    <!--  VISTA 1: INICIAR SESION -->
+            <!-- Formulario: crear cuenta (se abre tambien cuando el correo no esta registrado) -->
+            <form id="formRegistro" class="authForm oculto" novalidate aria-labelledby="tituloRegistro">
+                <h2 class="titulo" id="tituloRegistro">Crear cuenta</h2>
+                <p class="authSub">Solo toma un momento. Tus notas quedan guardadas en este navegador.</p>
 
-    <section id="vistaLogin" class="inFlex">
-        <div class="glassContainerMain" id="glassContainerMain">
-            <h1 class="titulo">Iniciar Sesión</h1>
-            <input type="email" class="email" placeholder="Correo electronico">
-            <input type="password" class="psw" placeholder="Contraseña">
-            <input type="button" value="Iniciar Sesión" class="btnIniciarSesion" id="btnIniciarSesion">
+                <div class="avisoForm oculto" id="avisoRegistro" role="status"></div>
+
+                <div class="campo">
+                    <label for="regNombre">Nombre</label>
+                    <input type="text" id="regNombre" class="campoInput" name="nombre" autocomplete="name" placeholder="Cómo te llamas" aria-describedby="errRegNombre" maxlength="40" required>
+                    <p class="campoError" id="errRegNombre" role="alert"></p>
+                </div>
+
+                <div class="campo">
+                    <label for="regEmail">Correo electrónico</label>
+                    <input type="email" id="regEmail" class="campoInput email" name="email" autocomplete="email" inputmode="email" placeholder="nombre@correo.com" aria-describedby="errRegEmail" maxlength="254" required>
+                    <p class="campoError" id="errRegEmail" role="alert"></p>
+                </div>
+
+                <div class="campo">
+                    <label for="regPass">Contraseña</label>
+                    <div class="campoClave">
+                        <input type="password" id="regPass" class="campoInput psw" name="new-password" autocomplete="new-password" placeholder="Mínimo 8 caracteres" aria-describedby="ayudaClave errRegPass avisoMayusReg" maxlength="64" required>
+                        <button type="button" class="verClave" data-target="regPass" aria-label="Mostrar contraseña" aria-pressed="false">
+                            <svg class="ico" aria-hidden="true"><use href="#i-eye"/></svg>
+                        </button>
+                    </div>
+                    <div class="fuerza" id="fuerza" data-nivel="0">
+                        <span class="fuerzaBarra"><i></i><i></i><i></i><i></i></span>
+                        <span class="fuerzaTexto" id="ayudaClave">Usa letras y números.</span>
+                    </div>
+                    <p class="campoAviso oculto" id="avisoMayusReg">Bloq Mayús está activado.</p>
+                    <p class="campoError" id="errRegPass" role="alert"></p>
+                </div>
+
+                <div class="campo">
+                    <label for="regPass2">Repite la contraseña</label>
+                    <input type="password" id="regPass2" class="campoInput psw" name="new-password-2" autocomplete="new-password" placeholder="Otra vez, para confirmar" aria-describedby="errRegPass2" maxlength="64" required>
+                    <p class="campoError" id="errRegPass2" role="alert"></p>
+                </div>
+
+                <button type="submit" class="btnAccion btnAncho" id="btnRegistrar">
+                    <span class="btnTexto">Crear cuenta</span>
+                </button>
+
+                <p class="authCambio">¿Ya tienes cuenta? <button type="button" class="enlaceBtn" id="irLogin">Iniciar sesión</button></p>
+            </form>
         </div>
     </section>
 
@@ -40,37 +183,75 @@
 
     <section id="vistaPanel" class="panel oculto">
 
-        <!-- Encabezado del panel: titulo + buscador + boton nueva nota -->
+        <!-- Encabezado del panel: saludo + buscador + boton nueva nota -->
         <header class="panelHeader">
-            <h1 class="titulo panelTitulo">Mis Notas</h1>
+            <div class="panelSaludo">
+                <h1 class="displayTitulo panelTitulo" id="panelTitulo">Mis notas</h1>
+                <p class="panelResumen" id="panelResumen" aria-live="polite"></p>
+            </div>
             <div class="panelHeaderAcciones">
-                <input type="search" id="inputBuscar" class="buscador" placeholder="Buscar nota...">
-                <button id="btnNuevaNota" class="btnAccion">+ Nueva nota</button>
+                <div class="buscadorCaja">
+                    <svg class="ico" aria-hidden="true"><use href="#i-search"/></svg>
+                    <input type="search" id="inputBuscar" class="buscador" placeholder="Buscar en tus notas" aria-label="Buscar notas" autocomplete="off">
+                </div>
+                <button type="button" id="btnNuevaNota" class="btnAccion">
+                    <svg class="ico" aria-hidden="true"><use href="#i-plus"/></svg>
+                    <span>Nueva nota</span>
+                </button>
             </div>
         </header>
 
-        <!-- Mensaje cuando no hay ninguna nota todavia -->
-        <p id="mensajeVacio" class="mensajeVacio">Todavia no tienes notas. Crea tu primera nota con el boton "+ Nueva nota".</p>
+        <!-- Filtro por materia -->
+        <div class="filtros oculto" id="filtrosMateria" role="group" aria-label="Filtrar por materia"></div>
+
+        <!-- Mensaje cuando no hay ninguna nota (o ninguna coincide) -->
+        <div id="mensajeVacio" class="mensajeVacio oculto">
+            <p id="textoVacio"></p>
+            <button type="button" class="btnAccion" id="btnVacioNueva">Escribir mi primera nota</button>
+        </div>
 
         <!-- Contenedor donde se pintan las tarjetas de notas -->
         <div id="listaNotas" class="listaNotas"></div>
     </section>
 
+    </main>
+
     <!--  FUNCIONALIDAD: CREAR / EDITAR NOTA -->
 
-    <div id="modalNota" class="modalFondo oculto">
-        <div class="glassContainer modalCaja">
+    <dialog id="modalNota" class="modalNota" aria-labelledby="modalTitulo">
+        <form id="formNota" class="glassContainer modalCaja" novalidate method="dialog">
             <h2 class="titulo modalTitulo" id="modalTitulo">Nueva nota</h2>
 
-            <input type="text" id="inputTitulo" class="email inputModal" placeholder="Titulo de la nota">
-            <textarea id="inputContenido" class="areaModal" placeholder="Escribe aqui tu nota..."></textarea>
+            <div class="campo">
+                <label for="inputTitulo">Título</label>
+                <input type="text" id="inputTitulo" class="campoInput" placeholder="Ej. Derivadas, clase 4" maxlength="80" aria-describedby="errNotaTitulo" autocomplete="off">
+                <p class="campoError" id="errNotaTitulo" role="alert"></p>
+            </div>
+
+            <div class="campo">
+                <label for="inputMateria">Materia <span class="opcional">(opcional)</span></label>
+                <input type="text" id="inputMateria" class="campoInput" placeholder="Ej. Cálculo II" maxlength="30" list="listaMaterias" autocomplete="off">
+                <datalist id="listaMaterias"></datalist>
+            </div>
+
+            <div class="campo">
+                <label for="inputContenido">Apuntes</label>
+                <textarea id="inputContenido" class="campoInput areaModal" placeholder="Escribe aquí lo que viste en clase…" maxlength="2000" aria-describedby="errNotaContenido contadorNota"></textarea>
+                <div class="campoPie">
+                    <p class="campoError" id="errNotaContenido" role="alert"></p>
+                    <span class="contador" id="contadorNota">0 / 2000</span>
+                </div>
+            </div>
 
             <div class="modalBotones">
-                <button id="btnGuardarNota" class="btnAccion">Guardar</button>
-                <button id="btnCancelarNota" class="btnSecundario">Cancelar</button>
+                <button type="button" id="btnCancelarNota" class="btnSecundario">Cancelar</button>
+                <button type="submit" id="btnGuardarNota" class="btnAccion">Guardar</button>
             </div>
-        </div>
-    </div>
+        </form>
+    </dialog>
+
+    <!-- Avisos breves (con "Deshacer" al eliminar) -->
+    <div class="toasts" id="toasts" role="status" aria-live="polite"></div>
 
 </body>
 </html>
